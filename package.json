@@ -1,14 +1,14 @@
 {
-  "name": "landing-template",
+  "name": "shillingdotfun-landing",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"npm run tailwind\"",
-    "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "dev:client": "vite --host",
+    "dev": "npm run dev:client",
+    "build": "vite build",
     "preview": "vite preview",
-    "tailwind": "tailwindcss -i ./src/assets/css/input.css -o ./src/assets/css/output.css --watch"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@headlessui/react": "2.2.8",
@@ -19,7 +19,9 @@
     "postcss": "8.5.6",
     "react": "19.1.1",
     "react-dom": "19.1.1",
-    "swiper": "12.0.2"
+    "react-icons": "^5.5.0",
+    "swiper": "12.0.2",
+    "tailwindcss": "3.4"
   },
   "devDependencies": {
     "@eslint/js": "9.36.0",
@@ -32,7 +34,6 @@
     "eslint-plugin-react-hooks": "5.2.0",
     "eslint-plugin-react-refresh": "0.4.21",
     "globals": "16.4.0",
-    "tailwindcss": "4.1.13",
     "typescript": "~5.9.2",
     "typescript-eslint": "8.44.1",
     "vite": "7.1.7"
