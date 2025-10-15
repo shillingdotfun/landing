@@ -10,36 +10,30 @@ const SoonPage = () => {
     return (
         <div className="static w-screen h-screen">
             <a href="https://x.com/shillingdotfun">
-                <div className="grid grid-cols-2 grid-rows-2">
+                <div className="grid sm:grid-cols-2 grid-cols-1">
                     <img
                         src={white}
-                        alt="Tab Image"
-                        className=""
+                        alt="shilling.fun logo"
                     />
                     <img
                         src={blue}
-                        alt="Tab Image"
-                        className=""
+                        alt="shilling.fun logo"
                     />
                     <img
                         src={green}
-                        alt="Tab Image"
-                        className=""
-                    />
-                    <img
-                        src={orange}
-                        alt="Tab Image"
-                        className=""
+                        alt="shilling.fun logo"
                     />
                     <img
                         src={purple}
-                        alt="Tab Image"
-                        className=""
+                        alt="shilling.fun logo"
                     />
                     <img
                         src={red}
-                        alt="Tab Image"
-                        className=""
+                        alt="shilling.fun logo"
+                    />
+                    <img
+                        src={orange}
+                        alt="shilling.fun logo"
                     />
                 </div>
             </a>
