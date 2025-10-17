@@ -56,12 +56,12 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "Test Build process for the frontend - Status: success"
+            text: "Test Build process for the frontend - Status: ${{ job.status }}"
             blocks:
               - type: "section"
                 text:
                   type: "mrkdwn"
-                  text: ":rotating_light: :rotating_light: *Test Build process for the frontend failed!* :rotating_light: :rotating_light:"
+                  text: ":rotating_light: :rotating_light: *Test Build process for the frontend ${{ job.status }}* :rotating_light: :rotating_light:"
               - type: "section"
                 text:
                   type: "mrkdwn"
