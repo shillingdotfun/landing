@@ -1,6 +1,10 @@
 // src/pages/Home.tsx
 
 import React from 'react';
+
+//import allColors from "../assets/images/shilling-logo/all-colors.gif"
+//import allColorsMobile from "../assets/images/shilling-logo/all-colors-mobile.gif"
+
 import Header from '../components/Common/Header';
 import { CampaignGrid } from '../components/Campaign/CampaignGrid';
 import { KOLMiniRanking } from '../components/KOL/KolMiniRanking';

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePrivy } from '@privy-io/react-auth';
-import { FaArrowRight } from 'react-icons/fa';
 
 import { useAuth } from '../../hooks/useAuth';
 import { useToasts } from '../../hooks/useToast';
@@ -10,7 +9,21 @@ import { registerOrLoginWithEmail, loginWithWallet } from '../../services/auth.s
 
 import Button from '../Common/Button';
 
-const PrivyLogin: React.FC = () => {
+interface PrivyLoginButtonProps {
+  label?: string;
+  icon?: string | ReactNode;
+  className?: string;
+  blinker?: boolean;
+  disabled?: boolean;
+}
+
+const PrivyLoginButton: React.FC<PrivyLoginButtonProps> = ({ 
+  label = 'Login', 
+  icon,
+  disabled = false,
+  className = '',
+  blinker = false,
+}) => {
   const { addNotification } = useToasts();
   const { login} = useAuth();
   const navigate = useNavigate();
@@ -81,12 +94,14 @@ const PrivyLogin: React.FC = () => {
     <div className="flex flex-col gap-4">
       <Button 
         onClick={handleLogin}
-        label={isLoading ? 'Connecting...' : 'Login'}
-        disabled={isLoading}
-        icon={<FaArrowRight></FaArrowRight>}
+        label={isLoading ? 'Connecting...' : label}
+        disabled={isLoading || disabled}
+        icon={icon}
+        className={className}
+        blinker={blinker}
       />
     </div>
   );
 };
 
-export default PrivyLogin;
+export default PrivyLoginButton;

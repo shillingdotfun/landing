@@ -1,9 +1,12 @@
 // src/components/kols/KOLRankingRow.tsx
 
 import React from 'react';
+import { FaFire } from "react-icons/fa6";
+
 import { getSuccessRateColor } from '../../utils/constants';
-import { KOL } from '../../types/kol.types';
 import { formatNumber, formatCurrency, formatPercentage } from '../../utils/formatters';
+
+import { KOL } from '../../types/kol.types';
 
 interface KOLRankingRowProps {
   kol: KOL;
@@ -76,7 +79,13 @@ export const KOLRankingRow: React.FC<KOLRankingRowProps> = ({ kol }) => {
 
       <div className="flex justify-center">
         <span className={`text-[11px] ${kol.currentStreak > 5 ? 'text-amber-500' : 'text-gray-400'}`} >
-          {kol.currentStreak > 5 ? `${kol.currentStreak}🔥` : kol.currentStreak}
+          {kol.currentStreak > 5 ? (
+            <span className='flex flex-row items-center gap-1'>
+              {kol.currentStreak} <FaFire/>
+            </span>
+          ) : (
+            kol.currentStreak
+          )}
         </span>
       </div>
     </div>
