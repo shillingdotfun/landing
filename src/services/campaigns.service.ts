@@ -2,7 +2,8 @@
 
 import { PaginatedResponse, ApiResponse } from '../types/api.types';
 import { Campaign, CreateCampaignDTO } from '../types/campaign.types';
-import { api } from './api';
+import api from './api';
+
 
 export const campaignsService = {
   async getAll(params?: {
@@ -12,30 +13,30 @@ export const campaignsService = {
     type?: string;
     sort?: string;
   }): Promise<PaginatedResponse<Campaign>> {
-    return api.get('/campaigns', params);
+    return api.get('/campaigns', params as any);
   },
 
   async getById(id: string): Promise<ApiResponse<Campaign>> {
-    return api.get(`/campaigns/${id}`);
+    return (await api.get(`/campaigns/${id}`)).data;
   },
 
   async getActive(): Promise<ApiResponse<Campaign[]>> {
-    return api.get('/campaigns/active');
+    return (await api.get('/campaigns/active')).data;
   },
 
   async create(data: CreateCampaignDTO): Promise<ApiResponse<Campaign>> {
-    return api.post('/campaigns', data);
+    return (await api.post('/campaigns', data)).data;
   },
 
   async join(campaignId: string): Promise<ApiResponse<any>> {
-    return api.post(`/campaigns/${campaignId}/join`);
+    return (await api.post(`/campaigns/${campaignId}/join`)).data;
   },
 
   async getParticipants(campaignId: string): Promise<ApiResponse<any[]>> {
-    return api.get(`/campaigns/${campaignId}/participants`);
+    return (await api.get(`/campaigns/${campaignId}/participants`)).data;
   },
 
   async getActivities(campaignId: string): Promise<ApiResponse<any[]>> {
-    return api.get(`/campaigns/${campaignId}/activities`);
+    return (await api.get(`/campaigns/${campaignId}/activities`)).data;
   },
 };

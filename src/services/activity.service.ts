@@ -1,12 +1,13 @@
 // src/services/activity.service.ts
 
+import api from './api';
 import { Activity } from '../types/activity.types';
 import { ApiResponse, PaginatedResponse } from '../types/api.types';
-import { api } from './api';
+
 
 export const activityService = {
   async getLatest(limit = 20): Promise<ApiResponse<Activity[]>> {
-    return api.get('/activities/latest', { limit });
+    return (await api.get('/activities/latest', { limit } as any)).data;
   },
 
   async getStream(params?: {
@@ -15,6 +16,6 @@ export const activityService = {
     type?: string;
     campaignId?: string;
   }): Promise<PaginatedResponse<Activity>> {
-    return api.get('/activities', params);
+    return (await api.get('/activities', params as any)).data;
   },
 };
