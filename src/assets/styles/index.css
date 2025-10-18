@@ -61,3 +61,38 @@
     transform: translateX(calc(-1 * var(--marquee-width)));
   }
 }
+
+/* src/index.css - Agregar al final */
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* Custom scrollbar */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #14141f;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #2a2a35;
+  border-radius: 2px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
