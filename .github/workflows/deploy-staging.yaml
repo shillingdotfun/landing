@@ -91,7 +91,6 @@ jobs:
         if: always()
         uses: slackapi/slack-github-action@v2.1.1
         with:
-          method: chat.postMessage
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
