@@ -1,6 +1,7 @@
 // src/components/layout/Header.tsx
 
 import purpleLogo from "../../assets/images/shilling-logo/large/purple-transparent.png"
+import PrivyLogin from "../Auth/PrivyLogin";
 
 export const Header: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ export const Header: React.FC = () => {
             {item.label}
           </a>
         ))}
+        <PrivyLogin></PrivyLogin>
       </nav>
     </header>
   );

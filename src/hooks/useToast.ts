@@ -1,9 +1,9 @@
 // src/hooks/useToasts.ts
 import { useContext } from "react";
-import { ToastContext } from "../context/ToastContext";
+import { NotificationContext } from "../context/NotificationContext";
 
 export const useToasts = () => {
-  const context = useContext(ToastContext);
+  const context = useContext(NotificationContext);
   if (!context) {
     throw new Error('useToasts must be used within a NotificationProvider');
   }

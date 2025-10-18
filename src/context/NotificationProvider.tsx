@@ -1,6 +1,6 @@
 import { ReactNode, useState, useRef, useEffect } from "react";
-import { ToastContext } from "./ToastContext";
-import { Notification } from "./ToastContext";
+import { NotificationContext } from "./NotificationContext";
+import { Notification } from "./NotificationContext";
 
 interface NotificationProviderProps {
   children: ReactNode;
@@ -123,8 +123,8 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
   };
 
   return (
-    <ToastContext.Provider value={{ notifications, addNotification, removeNotification }}>
+    <NotificationContext.Provider value={{ notifications, addNotification, removeNotification }}>
       {children}
-    </ToastContext.Provider>
+    </NotificationContext.Provider>
   );
 };

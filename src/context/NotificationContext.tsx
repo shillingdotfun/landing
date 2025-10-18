@@ -7,10 +7,10 @@ export interface Notification {
   isVisible: boolean;
 }
 
-interface ToastContextType {
+interface NotificationContextType {
   notifications: Notification[];
   addNotification: (message: string, type: 'success' | 'error' | 'info' | 'warning') => void;
   removeNotification: (id: string) => void;
 }
 
-export const ToastContext = createContext<ToastContextType | undefined>(undefined);
+export const NotificationContext = createContext<NotificationContextType | undefined>(undefined);

@@ -26,3 +26,5 @@ export const getSuccessRateColor = (rate: number): string => {
 export const getRandomGradient = (): string => {
   return GRADIENTS[Math.floor(Math.random() * GRADIENTS.length)];
 };
+
+export const USER_WALLET_ADDR_STORAGE_KEY = 'user_wallet';
