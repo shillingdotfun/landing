@@ -6,6 +6,7 @@ import { getRandomGradient } from '../../utils/constants';
 import { formatCurrency, formatTimeRemaining } from '../../utils/formatters';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Common/Button';
+import { useToasts } from '../../hooks/useToast';
 
 
 interface CampaignCardProps {
@@ -14,6 +15,7 @@ interface CampaignCardProps {
 }
 
 export const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onJoin }) => {
+  const { addNotification } = useToasts();
   const navigate = useNavigate();
   const [isJoining, setIsJoining] = useState(false);
   const [joined, setJoined] = useState(false);
@@ -31,7 +33,7 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onJoin }) 
       setJoined(true);
       setTimeout(() => setJoined(false), 3000);
     } else {
-      alert(result.error || 'Failed to join campaign');
+      addNotification(result.error || 'Failed to join campaign', 'error');
     }
   };
 
