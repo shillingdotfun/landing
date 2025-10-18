@@ -1,10 +1,11 @@
-import SoonPage from './pages/SoonPage';
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from './routes/AppRoutes';
 
 const App = () => {
   return (
-    <>
-      <SoonPage/>
-    </>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 
