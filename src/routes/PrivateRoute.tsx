@@ -21,8 +21,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, pageTitle }) => {
     return <Navigate to="/" />;
   }
 
-  alert('si');
-
   return <PrivateLayout pageTitle={pageTitle}>{children}</PrivateLayout>;
 };
 
