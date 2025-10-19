@@ -1,53 +1,41 @@
-// src/services/api.ts
-
-import axios, { AxiosError, AxiosResponse } from 'axios';
-
-export interface ApiResponse<T = any> {
-  success: boolean;
-  message?: string;
-  data: T;
-  errors?: Record<string, string[]>;
-  validationItems?: any;
-}
+// src/services/apiClient.ts
+import axios from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 30000,
 });
 
-// Request interceptor
+// Interceptor to inject the token into each request
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('auth_token');
+  const token = localStorage.getItem('token'); // Use localStorage to store the token
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// Response interceptor
 api.interceptors.response.use(
-  (response: AxiosResponse<ApiResponse>) => {
-    return response;
+  (response) => {
+    return response.data;
   },
-  (error: AxiosError<ApiResponse>) => {
+  (error) => {
     if (error.response?.status === 422) {
-      // Transform error to 422 but REJECT the promise
-      const apiError = new Error(error.response.data?.message || 'Validation failed') as any;
-      apiError.response = error.response;
-      apiError.validationErrors = error.response.data?.errors;
-      return Promise.reject(apiError);
+      return Promise.resolve({
+        success: false,
+        message: error.response.data?.message || 'Validation failed',
+        errors: error.response.data?.errors || undefined,
+        validationItems: error.response.data?.validationItems || undefined
+      });
     }
-    
-    if (error.response?.status === 401) {
-      localStorage.removeItem('auth_token');
-      window.location.href = '/login';
-    }
-    
-    // Always REJECT so the tray/catch blocks always work
-    return Promise.reject(error);
+
+    return Promise.resolve({
+      success: false,
+      message: error.response?.data?.message || 'Unexpected error',
+      errors: null,
+    });
   }
 );
 
