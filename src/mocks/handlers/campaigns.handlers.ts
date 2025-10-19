@@ -109,7 +109,7 @@ export const campaignsHandlers = [
       tokenSymbol: body.tokenSymbol,
       type: body.type,
       budget: body.budget,
-      hashtags: body.hashtags,
+      keywords: body.keywords,
       mentionAccount: body.mentionAccount,
       minKarma: body.minKarma,
       maxParticipants: body.maxParticipants,

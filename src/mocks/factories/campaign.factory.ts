@@ -22,7 +22,7 @@ export class CampaignFactory {
       minKarma: type === 'kol_exclusive' ? faker.number.int({ min: 1000, max: 10000 }) : undefined,
       maxParticipants: type === 'kol_exclusive' ? faker.number.int({ min: 5, max: 20 }) : undefined,
       
-      hashtags: [
+      keywords: [
         `#${faker.word.noun()}`,
         `$${faker.word.noun().toUpperCase()}`,
       ],

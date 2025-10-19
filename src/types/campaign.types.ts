@@ -28,7 +28,7 @@ export interface Campaign {
   maxParticipants?: number;
   
   // Tracking
-  hashtags: string[];
+  keywords: string[];
   mentionAccount?: string;
   
   // Metrics
@@ -54,7 +54,7 @@ export interface CreateCampaignDTO {
   tokenSymbol: string;
   type: CampaignType;
   budget: number;
-  hashtags: string[];
+  keywords: string[];
   mentionAccount?: string;
   minKarma?: number;
   maxParticipants?: number;
