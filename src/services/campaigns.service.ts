@@ -17,26 +17,26 @@ export const campaignsService = {
   },
 
   async getById(id: string): Promise<ApiResponse<Campaign>> {
-    return (await api.get(`/campaigns/${id}`)).data;
+    return await api.get(`/campaigns/${id}`);
   },
 
   async getActive(): Promise<ApiResponse<Campaign[]>> {
-    return (await api.get('/campaigns/active')).data;
+    return await api.get('/campaigns/active');
   },
 
   async create(data: CreateCampaignDTO): Promise<ApiResponse<Campaign>> {
-    return (await api.post('/campaigns', data)).data;
+    return await api.post('/campaigns', data);
   },
 
   async join(campaignId: string): Promise<ApiResponse<any>> {
-    return (await api.post(`/campaigns/${campaignId}/join`)).data;
+    return await api.post(`/campaigns/${campaignId}/join`);
   },
 
   async getParticipants(campaignId: string): Promise<ApiResponse<any[]>> {
-    return (await api.get(`/campaigns/${campaignId}/participants`)).data;
+    return await api.get(`/campaigns/${campaignId}/participants`);
   },
 
   async getActivities(campaignId: string): Promise<ApiResponse<any[]>> {
-    return (await api.get(`/campaigns/${campaignId}/activities`)).data;
+    return await api.get(`/campaigns/${campaignId}/activities`);
   },
 };

@@ -23,5 +23,5 @@ export interface UserUpdateResponseError {
 }
 
 export  const updateUserProfile = async (payload: UserUpdatePayload): Promise<UserUpdateResponse> => {
-    return (await api.put('/user', payload)).data;
+    return await api.put('/user', payload);
 };

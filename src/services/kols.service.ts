@@ -10,26 +10,26 @@ export const kolsService = {
     perPage?: number;
     sortBy?: 'karma' | 'earnings' | 'successRate' | 'reach';
   }): Promise<PaginatedResponse<KOL>> {
-    return (await api.get('/kols/leaderboard', params as any)).data;
+    return await api.get('/kols/leaderboard', params as any);
   },
 
   async getById(id: string): Promise<ApiResponse<KOL>> {
-    return (await api.get(`/kols/${id}`)).data;
+    return await api.get(`/kols/${id}`);
   },
 
   async getByUsername(username: string): Promise<ApiResponse<KOL>> {
-    return (await api.get(`/kols/username/${username}`)).data;
+    return await api.get(`/kols/username/${username}`);
   },
 
   async getStats(id: string): Promise<ApiResponse<KOLStats>> {
-    return (await api.get(`/kols/${id}/stats`)).data;
+    return await api.get(`/kols/${id}/stats`);
   },
 
   async getCampaigns(id: string): Promise<ApiResponse<any[]>> {
-    return (await api.get(`/kols/${id}/campaigns`)).data;
+    return await api.get(`/kols/${id}/campaigns`);
   },
 
   async getActivities(id: string, page?: number): Promise<PaginatedResponse<any>> {
-    return (await api.get(`/kols/${id}/activities`, { page } as any)).data;
+    return await api.get(`/kols/${id}/activities`, { page } as any);
   },
 };

@@ -7,7 +7,7 @@ import { ApiResponse, PaginatedResponse } from '../types/api.types';
 
 export const activityService = {
   async getLatest(limit = 20): Promise<ApiResponse<Activity[]>> {
-    return (await api.get('/activities/latest', { limit } as any)).data;
+    return await api.get('/activities/latest', { limit } as any);
   },
 
   async getStream(params?: {
@@ -16,6 +16,6 @@ export const activityService = {
     type?: string;
     campaignId?: string;
   }): Promise<PaginatedResponse<Activity>> {
-    return (await api.get('/activities', params as any)).data;
+    return await api.get('/activities', params as any);
   },
 };
