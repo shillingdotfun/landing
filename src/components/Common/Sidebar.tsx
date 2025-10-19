@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GrLogout } from "react-icons/gr";
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 
-import longLogoBlack from "../../assets/images/shilling-logo/large/black.svg"
+import longLogoBlack from "../../assets/images/shilling-logo/large/white-transparent.svg"
 import smallBlackLogo from "../../assets/images/shilling-logo/small/white.svg"
 import useIsMobile from '../../hooks/useIsMobile';
 import { useAuth } from '../../hooks/useAuth';
@@ -42,20 +42,20 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
       <div 
         className={`flex mb-8 justify-between items-center mt-4 px-4 py-4 min-h-[80px]`}
       >
-        <div className="flex items-center overflow-hidden">
+        <div className="flex items-center w-full overflow-hidden">
           {!isCollapsed ? (
             <img
               onClick={() => navigate('/dashboard')}
               src={longLogoBlack}
               alt="Logo"
-              className="h-12 max-w-[130px] cursor-pointer transition-opacity duration-300"
+              className="h-12 px-4 cursor-pointer transition-opacity duration-300"
             />
           ) : (
             <img
               onClick={() => navigate('/dashboard')}
               src={smallBlackLogo}
               alt="Logo"
-              className="h-10 cursor-pointer transition-opacity duration-300 mx-auto"
+              className="h-8 cursor-pointer transition-opacity duration-300 mx-auto"
             />
           )}
         </div>
