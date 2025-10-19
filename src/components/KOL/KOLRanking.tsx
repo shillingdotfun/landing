@@ -26,7 +26,7 @@ export const KOLRankingTable: React.FC<KOLRankingTableProps> = ({ limit = 10 }) 
   }
 
   return (
-    <div className="bg-[#14141f] border border-[#2a2a35]">
+    <div className="border border-[#2a2a35]">
       <div className="grid grid-cols-[80px_1fr_100px_100px_100px_100px_110px_110px_100px] gap-3 px-6 py-5 bg-indigo-500/5 border-b border-[#2a2a35] text-[7px] text-gray-500" >
         <div className="text-center">RANK</div>
         <div>KOL</div>

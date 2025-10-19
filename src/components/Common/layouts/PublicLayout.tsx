@@ -39,8 +39,8 @@ const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
             onClose={closeSidebar} 
           />
         )}
-        <main className="sm:px-8 py-[3vh] px-4 w-full h-screen overflow-y-scroll">
-          <div className='xl:max-w-[1250px] mx-auto'>
+        <main className="sm:px-8 px-4 w-full h-screen overflow-y-scroll">
+          <div className='mx-auto'>
             {children}
           </div>
         </main>

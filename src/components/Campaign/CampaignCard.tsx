@@ -41,7 +41,7 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onJoin }) 
   const isCommunity = campaign.type === 'community';
 
   return (
-    <div onClick={handleCardClick} className="bg-[#14141f] border border-[#2a2a35] p-6 transition-all hover:border-indigo-500 hover:-translate-y-1 cursor-pointer">
+    <div onClick={handleCardClick} className="border border-[#2a2a35] p-6 transition-all hover:border-indigo-500 hover:-translate-y-1 cursor-pointer">
       <div className="flex items-center gap-4 mb-5">
         <div className={`w-14 h-14 ${gradient}`} style={{ imageRendering: 'pixelated' }} />
         <div>

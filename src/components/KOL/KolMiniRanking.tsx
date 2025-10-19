@@ -10,8 +10,8 @@ export const KOLMiniRanking: React.FC = () => {
   const { kols, loading } = useKOLs(5);
 
   return (
-    <div className="bg-[#14141f] border border-[#2a2a35] p-5">
-      <h3 className="text-xs text-gray-200 mb-5 pb-4 border-b border-[#2a2a35]" >
+    <div className="border border-[#2a2a35] p-5">
+      <h3 className="text-sm text-gray-200 mb-5 pb-4 border-b border-[#2a2a35]" >
         TOP KOLS
       </h3>
       {loading ? (
