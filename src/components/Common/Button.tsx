@@ -24,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   blinker = false,
   isActive = false,
 }) => {
-  const buttonClass = 'flex flex-row py-2 sm:px-5 px-4 gap-4 font-anek-latin uppercase text-xs justify-start items-center rounded-sm transition-colors bg-black relative shadow-xl';
+  const buttonClass = 'flex flex-row py-2 sm:px-5 px-4 gap-4 font-anek-latin uppercase text-xs justify-start items-center rounded-sm transition-colors bg-black relative';
   const isActiveClasses = 'bg-palette-primary !text-black';
 
   return (
