@@ -17,9 +17,9 @@ export const loginWithWallet = async (walletAddress: string, email?: string) => 
   
   const response = await api.post('/wallet-login', payload);
   
-  if (response.data.wallet_address) {
+  if (response.data.user.wallet_address) {
     const walletService = WalletService.getInstance();
-    walletService.saveWalletAddr(response.data.wallet_address);
+    walletService.saveWalletAddr(response.data.user.wallet_address);
   }
   
   return response.data.token;
