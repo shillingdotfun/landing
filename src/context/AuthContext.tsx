@@ -1,11 +1,13 @@
 // src/context/AuthContext.tsx
 import { createContext } from 'react';
 import { User } from '../types/user.types';
+import { SessionStatus } from './AuthProvider';
 
 
 interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
+  sessionStatus: SessionStatus;
   userProfile: User | null;
   loading: boolean;
   error: string | null;
@@ -17,6 +19,7 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType>({
   token: null,
   isAuthenticated: false,
+  sessionStatus: 'unknown', 
   userProfile: null,
   loading: false,
   error: null,

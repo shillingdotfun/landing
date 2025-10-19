@@ -25,7 +25,7 @@ const PrivyLoginButton: React.FC<PrivyLoginButtonProps> = ({
   blinker = false,
 }) => {
   const { addNotification } = useToasts();
-  const { login} = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -48,13 +48,13 @@ const PrivyLoginButton: React.FC<PrivyLoginButtonProps> = ({
         const sessionToken = await registerOrLoginWithEmail(user.email.address);
         login(sessionToken);
         addNotification('Login successful!', 'success');
-        navigate('/agent/character');
+        navigate('/');
 
       } else if (user.wallet?.address) {
         const sessionToken = await loginWithWallet(user.wallet.address);
         login(sessionToken);
         addNotification('Login successful!', 'success');
-        navigate('/agent/character');
+        navigate('/');
 
       }
     } catch (err: any) {
@@ -67,7 +67,7 @@ const PrivyLoginButton: React.FC<PrivyLoginButtonProps> = ({
   };
 
   useEffect(() => {
-    if (ready && authenticated && user && (user.wallet?.address || user.email?.address)) {
+    if (!isAuthenticated && ready && authenticated && user && (user.wallet?.address || user.email?.address)) {
       processUserLogin();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

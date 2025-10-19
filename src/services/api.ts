@@ -22,13 +22,21 @@ api.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    if (error.response?.status === 422) {
-      return Promise.resolve({
-        success: false,
-        message: error.response.data?.message || 'Validation failed',
-        errors: error.response.data?.errors || undefined,
-        validationItems: error.response.data?.validationItems || undefined
-      });
+    switch (error.response?.status) {
+      case 422:
+        return Promise.resolve({
+          success: false,
+          message: error.response.data?.message || 'Validation failed',
+          errors: error.response.data?.errors || undefined,
+          validationItems: error.response.data?.validationItems || undefined
+        });
+      case 401:
+        localStorage.removeItem('token');
+        return Promise.reject({
+          success: false,
+          message: error.response?.data?.message || 'Forbidden',
+          errors: null,
+        });
     }
 
     return Promise.resolve({

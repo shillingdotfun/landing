@@ -1,7 +1,6 @@
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 
-import { useWallet } from "@solana/wallet-adapter-react";
 import { useLogout } from "@privy-io/react-auth";
 
 import { User } from "../types/user.types";
@@ -10,18 +9,50 @@ import { getUserProfile } from "../services/user.service";
 import { WalletService } from "../services/wallet.service";
 import { AuthContext } from "./AuthContext";
 
+export type SessionStatus = 'unknown' | 'valid' | 'invalid';
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { disconnect: disconnectSolana, connected } = useWallet();
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [userProfile, setUserProfile] = useState<User | null>(null);
+  const [sessionStatus, setSessionStatus] = useState<SessionStatus>('unknown');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+  const validatingRef = useRef(false);
   const { logout: privyLogout } = useLogout({
     onSuccess: () => {
       console.log('User successfully logged out');
     },
   });
+
+  const validateSession = async () => {
+    if (!token) {
+      setSessionStatus('invalid');
+      setUserProfile(null);
+      return;
+    }
+    if (validatingRef.current) return;
+    validatingRef.current = true;
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await getUserProfile(); // should fail with 401 if the token is not valid
+      setUserProfile(res.data ?? null);
+      setSessionStatus('valid');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e: any) {
+      setSessionStatus('invalid');
+      setUserProfile(null);
+    } finally {
+      setLoading(false);
+      validatingRef.current = false;
+    }
+  };
+
+  useEffect(() => {
+    setSessionStatus('unknown');
+    void validateSession();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   const loadUserProfile = async () => {
     if (!token) return;
@@ -54,16 +85,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('User logout OK');
       setToken(null);
       setUserProfile(null);
+      setSessionStatus('invalid');
       setError(null);
       localStorage.removeItem('token');
       
       // Clean up services
       const walletService = WalletService.getInstance();
       walletService.removeWalletAddr();
-
-      if (connected) {
-        await disconnectSolana();
-      }
     } catch (error) {
       console.error('Privy error logging out:', error);
       setError('Error during logout');
@@ -72,7 +100,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const value = useMemo(() => ({
     token,
-    isAuthenticated: !!token,
+    isAuthenticated: !!token && sessionStatus === 'valid',
+    sessionStatus,
     userProfile,
     loading,
     error,
@@ -80,7 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     logout,
     loadUserProfile,
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [token, userProfile, loading, error]);
+  }), [token, sessionStatus, userProfile, loading, error]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

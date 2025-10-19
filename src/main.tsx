@@ -7,6 +7,7 @@ import App from './App';
 import './assets/styles/index.css';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { toSolanaWalletConnectors } from '@privy-io/react-auth/solana';
+import { AuthProvider } from './context/AuthProvider';
 
 async function enableMocking() {
   if (import.meta.env.VITE_USE_MOCK !== 'true') {
@@ -49,7 +50,7 @@ enableMocking().then(() => {
               ],
               accentColor: '#000000ff',
               theme: '#ffffffdf',
-              showWalletLoginFirst: false,
+              showWalletLoginFirst: true,
               logo: '/purple-transparent.png',
             },
             externalWallets: {
@@ -66,7 +67,9 @@ enableMocking().then(() => {
             mfa: { noPromptOnMfaRequired: false },
           }}
         >
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
       </PrivyProvider>
     </React.StrictMode>
   );
