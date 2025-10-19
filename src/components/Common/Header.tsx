@@ -5,7 +5,7 @@ import PrivyLogin from "../Auth/PrivyLogin";
 
 export const Header: React.FC = () => {
   return (
-    <header className="bg-[#0f0f14]/95 backdrop-blur-lg px-10 py-5 flex justify-between items-center border-b border-[#2a2a35] sticky top-0 z-50">
+    <header className="flex w-full items-center justify-between p-4 lg:px-10 border-b border-b-purple-700">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-4 cursor-pointer" onClick={() => window.location.href = '/'}>
           <img src={purpleLogo} className="max-h-12" />
