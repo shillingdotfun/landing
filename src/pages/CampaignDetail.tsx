@@ -10,6 +10,7 @@ import { formatCurrency, formatTimeRemaining, formatNumber } from '../utils/form
 import Button from '../components/Common/Button';
 import { useToasts } from '../hooks/useToast';
 import PublicLayout from '../components/Common/layouts/PublicLayout';
+import ContentBlock from '../components/Common/layouts/ContentBlock';
 
 
 export const CampaignDetail: React.FC = () => {
@@ -75,7 +76,7 @@ export const CampaignDetail: React.FC = () => {
           />
 
           {/* Campaign Header */}
-          <div className="border border-[#2a2a35] p-8 mb-8">
+          <ContentBlock className="mb-8">
             <div className="flex items-start gap-8 mb-8">
               <div className={`w-24 h-24 ${getRandomGradient()} flex-shrink-0`} style={{ imageRendering: 'pixelated' }} />
               
@@ -93,7 +94,7 @@ export const CampaignDetail: React.FC = () => {
                 </div>
                 
                 <div className="flex gap-6 text-[9px] text-gray-400 mb-6" >
-                  {campaign.hashtags.map((tag, i) => (
+                  {campaign.keywords.map((tag, i) => (
                     <span key={i}>{tag}</span>
                   ))}
                 </div>
@@ -156,9 +157,10 @@ export const CampaignDetail: React.FC = () => {
                 <span>REMAINING: {formatCurrency(campaign.budget - campaign.distributedAmount)}</span>
               </div>
             </div>
-          </div>
+          </ContentBlock>
 
           {/* Stats Grid */}
+          <ContentBlock className="mb-8">
           <div className="grid grid-cols-3 gap-6 mb-8">
             <div className="border border-[#2a2a35] p-6">
               <div className="text-[8px] text-gray-500 mb-3" >
@@ -196,6 +198,7 @@ export const CampaignDetail: React.FC = () => {
               </div>
             </div>
           </div>
+          </ContentBlock>
 
           {/* Two Column Layout */}
           <div className="grid grid-cols-[1fr_400px] gap-8">
