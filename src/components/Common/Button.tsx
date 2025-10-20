@@ -24,12 +24,12 @@ const Button: React.FC<ButtonProps> = ({
   blinker = false,
   isActive = false,
 }) => {
-  const buttonClass = 'flex flex-row py-2 sm:px-5 px-4 gap-4 font-anek-latin uppercase text-xs justify-start items-center rounded-sm transition-colors bg-black relative';
+  const buttonClass = 'flex flex-row py-2 sm:px-5 px-4 gap-4 font-bold uppercase justify-start items-center rounded-md transition-colors bg-black relative';
   const isActiveClasses = 'bg-palette-primary !text-black';
 
   return (
     <button 
-      className={`${buttonClass} ${disabled ? 'opacity-60 bg-slate-400 text-black cursor-not-allowed' : 'bg-indigo-500 text-white hover:bg-purple-600 text-white'} ${isActive ? isActiveClasses : ''} ${className}`}
+      className={`${buttonClass} ${disabled ? 'opacity-60 bg-slate-400 text-black cursor-not-allowed' : 'bg-purple-300 text-white hover:bg-purple-600 text-white'} ${isActive ? isActiveClasses : ''} ${className}`}
       onClick={onClick}
       disabled={disabled}
     >

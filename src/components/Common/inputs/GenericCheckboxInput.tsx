@@ -57,7 +57,7 @@ const GenericCheckboxInput = forwardRef<HTMLInputElement, GenericCheckboxInputPr
     }
     if (label) {
       return (
-        <span className="font-afacad font-semibold">
+        <span className="font-semibold">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </span>

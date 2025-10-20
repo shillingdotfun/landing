@@ -29,7 +29,7 @@ const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className={`flex ${!isAuthenticated ? 'flex-col' : 'flow-row'} relative z-2 h-screen overflow-hidden m-0 bg-purple-900`}>
+    <div className={`flex ${!isAuthenticated ? 'flex-col' : 'flow-row'} relative z-2 h-screen overflow-hidden m-0 bg-blue-900 text-purple-100 font-anek-latin`}>
         {!isAuthenticated ? (
           <Header/>
         ) : (

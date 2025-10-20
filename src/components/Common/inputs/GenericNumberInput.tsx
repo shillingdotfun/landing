@@ -62,11 +62,12 @@ const GenericNumberInput = forwardRef<HTMLInputElement, GenericNumberInputProps>
   
   const inputClasses = useMemo(() => {
     const baseClasses = [
-      'bg-input-light',
-      'rounded-md',
+      'rounded-lg',
+      'bg-purple-100',
       'resize-none',
-      'placeholder:text-gray-400 placeholder:font-light placeholder:font-anek-latin placeholder:text-sm',
-      'w-full px-4 py-2.5'
+      'text-[#3e2b56]',
+      'placeholder:text-gray-400 placeholder:font-light placeholder:text-sm',
+      'w-full px-4 py-2'
     ];
 
     const conditionalClasses = [
@@ -103,7 +104,7 @@ const GenericNumberInput = forwardRef<HTMLInputElement, GenericNumberInputProps>
     if (!label) return null;
 
     return (
-      <label htmlFor={name ?? ''} className="block items-center flex flex-row mb-1 text-white">
+      <label htmlFor={name ?? ''} className="block items-center flex flex-row mb-1 text-sm">
         <span>{label}</span>
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>

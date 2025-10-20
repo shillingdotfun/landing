@@ -32,7 +32,7 @@ const PrivateLayout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className="flex relative z-2 h-screen overflow-hidden m-0 bg-blue-900">
+    <div className="flex relative z-2 h-screen overflow-hidden m-0 bg-blue-900 text-purple-100 font-anek-latin">
       {/* Overlay to close the sidebar when the user clicks outside (just for mobile) */}
       {sidebarIsVisible && (
         <div 
@@ -50,7 +50,7 @@ const PrivateLayout: React.FC<LayoutProps> = ({ children }) => {
       <main className="sm:px-8 py-[3vh] px-4 w-full h-screen overflow-y-scroll">
         <div className='xl:max-w-[1250px] mx-auto'>
         {/* header */}
-        <div className='flex flex-row justify-between shadow-lg mb-4 rounded-lg'>
+        <div className='flex flex-row justify-between mb-4 rounded-lg'>
           {!sidebarIsVisible &&
             <button 
               className='sm:hidden block p-2 bg-palette-primary rounded-tr-lg rounded-br-lg' 

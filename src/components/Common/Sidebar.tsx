@@ -30,8 +30,9 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
   return (
     <aside 
       className={`
-        bg-purple-700 text-purple-200
-        fixed sm:static z-40 font-afacad h-screen flex flex-col transition-[width,transform] duration-300 ease-in-out
+        bg-purple-700
+        bg-[#3e2b56]
+        fixed sm:static z-40 h-screen flex flex-col transition-[width,transform] duration-300 ease-in-out
         ${show ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
         ${isCollapsed ? 'sm:w-20' : 'sm:w-[260px]'}
         w-[80%]
@@ -39,9 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
       style={{ willChange: 'width' }}
     >     
       {/* logo */} 
-      <div 
-        className={`flex mb-8 justify-between items-center mt-4 px-4 py-4 min-h-[80px]`}
-      >
+      <div className={`flex mb-8 justify-between items-center mt-4 px-4 py-4 min-h-[80px]`}>
         <div className="flex items-center w-full overflow-hidden">
           {!isCollapsed ? (
             <img
@@ -75,8 +74,8 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
       {/* Collapse button */}
       <div 
         onClick={toggleCollapse}
-        className='hidden sm:block rounded bg-purple-700 border border-purple-300 absolute z-[100] -right-6 top-10 p-2 cursor-pointer transition-colors'>
-        {isCollapsed ? <FaAngleRight/> : <FaAngleLeft/>}
+        className='hidden sm:block rounded bg-[#3e2b56] border border-purple-100/20 absolute z-[100] -right-3 top-10 p-1 cursor-pointer transition-colors'>
+        {isCollapsed ? <FaAngleRight className='text-xs'/> : <FaAngleLeft className='text-xs'/>}
       </div>
       
       {/* Menu */}
@@ -86,8 +85,8 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
             <li key={item.path}>
               <Link
                 to={item.path}
-                className={`block mb-2 group relative rounded-md transition-colors duration-200 hover:text-purple-100 ${
-                  location.pathname === item.path ? "bg-purple-300 text-purple-100" : "hover:bg-purple-300"
+                className={`block mb-2 group relative rounded-md transition-colors duration-200 hover:text-purple-700 ${
+                  location.pathname === item.path ? "bg-purple-300 text-purple-700" : "hover:bg-purple-300"
                 }`}
                 onClick={() => {
                   if (window.innerWidth < 640) {
@@ -96,8 +95,8 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
                 }}
                 title={isCollapsed ? item.name : undefined}
               >
-                <div className={`flex flex-row items-center gap-2 py-3 ${
-                  isCollapsed ? 'px-0 justify-center items-center text-center' : 'px-4 justify-start'
+                <div className={`flex flex-row items-center gap-2 p-2 ${
+                  isCollapsed ? 'justify-center items-center text-center' : 'justify-start'
                 }`}>
                   {/* Icon */}
                   <span className={`flex-shrink-0 ${isCollapsed ? 'sm:text-xl' : ''}`}>
@@ -114,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
                 
                 {/* Tooltip for collapsed mode */}
                 {isCollapsed && (
-                  <div className="hidden font-anek-latin bg-purple-600 sm:block absolute left-full top-1/2 transform -translate-y-1/2 ml-2 px-2 py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
+                  <div className="hidden bg-purple-600 sm:block absolute left-full top-1/2 transform -translate-y-1/2 ml-2 px-2 py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap text-purple-100">
                     {item.name}
                   </div>
                 )}
@@ -136,8 +135,8 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
                 logout();
               }}
             >
-              <div className={`flex flex-row items-center gap-2 py-3 ${
-                isCollapsed ? 'px-0 justify-center items-center text-center' : 'px-4 justify-start'
+              <div className={`flex flex-row items-center gap-2 p-2 ${
+                isCollapsed ? 'justify-center items-center text-center' : 'justify-start'
               }`}>
                 {/* Icon */}
                 <span className={`flex-shrink-0 ${isCollapsed ? 'sm:text-xl' : ''}`}>
@@ -154,7 +153,7 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
               
               {/* Tooltip for collapsed mode */}
               {isCollapsed && (
-                <div className="hidden font-anek-latin bg-purple-600 sm:block absolute left-full top-1/2 transform -translate-y-1/2 ml-2 px-2 py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
+                <div className="hidden bg-purple-600 sm:block absolute left-full top-1/2 transform -translate-y-1/2 ml-2 px-2 py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap text-purple-100">
                   Logout
                 </div>
               )}
