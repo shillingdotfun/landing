@@ -15,14 +15,22 @@ import PublicLayout from '../components/Common/layouts/PublicLayout';
 export const Home: React.FC = () => {
   return (
     <PublicLayout>
-      <div className="min-h-screen text-white">
+      <div className="min-h-screen">
+        <section className='flex flex-col max-w-[1600px] mx-auto p-10 my-12 gap-2'>
+          <h2 className='text-2xl'>
+            Welcome the Attention Capital Markets
+          </h2>
+          <h1 className='font-afacad text-5xl font-bold'>
+            Work for your bags. Earn from your shill.
+          </h1>
+        </section>
         <div className="max-w-[1600px] mx-auto p-10 grid grid-cols-[1fr_380px] gap-8">
           {/* Main Content */}
           <div className="flex flex-col gap-8">
             {/* Campaigns Section */}
             <section>
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-sm text-gray-200" >
+                <h2 className="text-sm" >
                   ACTIVE CAMPAIGNS
                 </h2>
                 <a 
@@ -39,7 +47,7 @@ export const Home: React.FC = () => {
             {/* KOL Ranking Section */}
             <section>
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-sm text-gray-200" >
+                <h2 className="text-sm" >
                   TOP KOLS
                 </h2>
                 <a 
