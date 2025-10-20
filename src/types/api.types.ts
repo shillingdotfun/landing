@@ -16,13 +16,9 @@ export interface PaginatedResponse<T> {
   };
 }
 
-export interface ApiError {
-  message: string;
-  errors?: Record<string, string[]>;
-  code?: string;
-}
-
 export interface ApiResponse<T> {
-  data: T;
-  message?: string;
+  success: boolean;
+  message: string;
+  data?: T;
+  errors?: Record<string, string[]>;
 }

@@ -28,7 +28,6 @@ api.interceptors.response.use(
           success: false,
           message: error.response.data?.message || 'Validation failed',
           errors: error.response.data?.errors || undefined,
-          validationItems: error.response.data?.validationItems || undefined
         });
       case 401:
         localStorage.removeItem('token');
