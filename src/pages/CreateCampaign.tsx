@@ -25,6 +25,7 @@ export const CreateCampaign: React.FC = () => {
 
   const [formData, setFormData] = useState<CreateCampaignDTO>({
     campaignName: '',
+    campaignDescription: '',
     tokenSymbol: '',
     tokenContractAddress: '',
     type: CampaignType.COMMUNITY,
@@ -123,7 +124,7 @@ export const CreateCampaign: React.FC = () => {
                 <GenericTextInput
                   value={formData.campaignName}
                   onChange={(e) => handleChange('campaignName', e.target.value)}
-                  placeholder="e.g. DegenDAO token launch campaign"
+                  placeholder="DegenDAO token launch campaign"
                   required={true}
                   label='Campaign name'
                   hasError={errors.campaignName ? true : false}
@@ -148,7 +149,7 @@ export const CreateCampaign: React.FC = () => {
                 <GenericTextInput
                   value={formData.tokenContractAddress}
                   onChange={(e) => handleChange('tokenContractAddress', e.target.value)}
-                  placeholder="e.g. So11111111111111111111111111111111111111111"
+                  placeholder="So11111111111111111111111111111111111111111"
                   required={true}
                   label='Token contract address'
                   hasError={errors.tokenContractAddress ? true : false}
@@ -158,7 +159,7 @@ export const CreateCampaign: React.FC = () => {
                 <GenericTextInput
                   value={formData.tokenSymbol}
                   onChange={(e) => handleChange('tokenSymbol', e.target.value)}
-                  placeholder="e.g. DEGEN"
+                  placeholder="DEGEN"
                   required={true}
                   label='Token symbol'
                   hasError={errors.tokenSymbol ? true : false}
@@ -168,7 +169,10 @@ export const CreateCampaign: React.FC = () => {
               <div className='grid grid-cols-1 gap-4'>
                 {/* Description */}
                 <GenericTextArea
+                  value={formData.campaignDescription}
+                  onChange={(e) => handleChange('campaignDescription', e.target.value)}
                   label={'Campaign description'}
+                  placeholder='Campaign designed to generate volume on token TGE'
                   rows={5}
                   maxLength={500}
                   showCharCount={true}

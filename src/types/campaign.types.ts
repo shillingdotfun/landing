@@ -15,6 +15,7 @@ export enum CampaignStatus {
 export interface Campaign {
   id: string;
   campaignName: string;
+  campaignDescription?: string;
   tokenContractAddress: string;
   tokenSymbol: string;
   type: CampaignType;
@@ -52,6 +53,7 @@ export interface Campaign {
 
 export interface CreateCampaignDTO {
   campaignName: string;
+  campaignDescription?: string;
   tokenContractAddress: string;
   tokenSymbol: string;
   type: CampaignType;
