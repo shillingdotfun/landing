@@ -7,6 +7,7 @@ import { formatCurrency, formatTimeRemaining } from '../../utils/formatters';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Common/Button';
 import { useToasts } from '../../hooks/useToast';
+import ContentBlock from '../Common/layouts/ContentBlock';
 
 
 interface CampaignCardProps {
@@ -41,49 +42,49 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onJoin }) 
   const isCommunity = campaign.type === 'community';
 
   return (
-    <div onClick={handleCardClick} className="border border-[#2a2a35] p-6 transition-all hover:border-indigo-500 hover:-translate-y-1 cursor-pointer">
+    <ContentBlock onClick={handleCardClick} className="border border-[#2a2a35] transition-all hover:-translate-y-1 cursor-pointer">
       <div className="flex items-center gap-4 mb-5">
-        <div className={`w-14 h-14 ${gradient}`} style={{ imageRendering: 'pixelated' }} />
+        <div className={`w-14 h-14 rounded-full ${gradient}`} style={{ imageRendering: 'pixelated' }} />
         <div>
-          <h3 className="text-[13px] text-gray-200 mb-2" >
+          <h3 className="text-[13px]  mb-2" >
             {campaign.campaignName}
           </h3>
-          <p className="text-[8px] text-gray-500" >
+          <p className="text-[8px] " >
             {campaign.type === 'community' ? 'COMMUNITY' : 'KOL EXCLUSIVE'}
           </p>
         </div>
       </div>
       
-      <div className="grid grid-cols-2 gap-4 my-5 p-4 bg-indigo-500/5 border border-[#2a2a35]">
+      <div className="grid grid-cols-2 gap-4 my-5 p-4 bg-purple-500/60 rounded">
         <div className="flex flex-col gap-1">
-          <div className="text-[7px] text-gray-500" >
+          <div className="text-xs" >
             {isCommunity ? 'POOL' : 'BUDGET'}
           </div>
-          <div className="text-[12px] text-gray-200" >
+          <div className="text-sm text-green-400" >
             {formatCurrency(campaign.budget)}
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <div className="text-[7px] text-gray-500" >
+          <div className="text-xs" >
             ENDS IN
           </div>
-          <div className="text-[12px] text-gray-200" >
+          <div className="text-sm " >
             {formatTimeRemaining(campaign.endsAt)}
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <div className="text-[7px] text-gray-500" >
+          <div className="text-xs" >
             {isCommunity ? 'ENGAGEMENT' : 'MIN KARMA'}
           </div>
-          <div className="text-[12px] text-gray-200" >
+          <div className="text-sm " >
             {isCommunity ? formatCurrency(campaign.totalEngagement) : campaign.minKarma?.toLocaleString()}
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <div className="text-[7px] text-gray-500" >
+          <div className="text-xs" >
             {isCommunity ? 'AVG REWARD' : 'SPOTS'}
           </div>
-          <div className="text-[12px] text-gray-200" >
+          <div className="text-sm text-green-400" >
             {isCommunity 
               ? formatCurrency(campaign.averageReward || 0)
               : `${campaign.participantsCount}/${campaign.maxParticipants}`
@@ -93,7 +94,7 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onJoin }) 
       </div>
 
       <div className="flex justify-between items-center mt-4 pt-4 border-t border-[#2a2a35]">
-        <span className="text-[8px] text-gray-500" >
+        <span className="text-[8px]" >
           {isCommunity 
             ? `${campaign.participantsCount} PARTICIPANTS`
             : 'VERIFIED KOLS ONLY'
@@ -105,6 +106,6 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onJoin }) 
           label={joined ? 'JOINED!' : isJoining ? 'JOINING...' : isCommunity ? 'JOIN' : 'APPLY'}
         />
       </div>
-    </div>
+    </ContentBlock>
   );
 };

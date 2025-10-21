@@ -13,9 +13,9 @@ export const ActivityFeed: React.FC = () => {
   return (
     <div className="border border-[#2a2a35] p-5 top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
       <div className="flex justify-between items-center mb-5 pb-4 border-b border-[#2a2a35]">
-        <h3 className="text-sm text-gray-200" >
-          LIVE FEED
-        </h3>
+        <h2 className="text-3xl font-bold font-afacad">
+          Live feed
+        </h2>
         <LiveIndicator />
       </div>
 
