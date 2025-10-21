@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
     inputs:
       env_deploy:
-        description: 'Environment to deploy'
+        description: 'Environment to release the code.'
         required: true
         type: choice
         options:
@@ -40,6 +40,8 @@ jobs:
     name: Deploy version
     runs-on: ubuntu-latest
     environment: staging
+    env:
+      ENV_TO_DEPLOY: ${{ github.event.inputs.env_deploy }}
 
     steps:
       # https://github.com/actions/checkout
@@ -114,7 +116,7 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "Release Frontend to ${{ github.event.inputs.env_deploy }} - Status: ${{ job.status }}"
+            text: "Release Frontend to ${ENV_TO_DEPLOY} - Status: ${{ job.status }}"
             blocks:
               - type: "section"
                 text:
