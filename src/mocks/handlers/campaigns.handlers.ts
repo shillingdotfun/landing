@@ -91,12 +91,12 @@ export const campaignsHandlers = [
     
     const body = await request.json() as CreateCampaignDTO;
     
-    if (!body.projectName || !body.budget) {
+    if (!body.campaignName || !body.budget) {
       return HttpResponse.json(
         { 
           message: 'Validation error',
           errors: {
-            projectName: body.projectName ? [] : ['Project name is required'],
+            campaignName: body.campaignName ? [] : ['Campaign name is required'],
             budget: body.budget ? [] : ['Budget is required'],
           }
         },
@@ -105,7 +105,7 @@ export const campaignsHandlers = [
     }
     
     const newCampaign = CampaignFactory.create({
-      projectName: body.projectName,
+      campaignName: body.campaignName,
       tokenSymbol: body.tokenSymbol,
       type: body.type,
       budget: body.budget,

@@ -14,7 +14,8 @@ export enum CampaignStatus {
 
 export interface Campaign {
   id: string;
-  projectName: string;
+  campaignName: string;
+  tokenContractAddress: string;
   tokenSymbol: string;
   type: CampaignType;
   status: CampaignStatus;
@@ -50,10 +51,11 @@ export interface Campaign {
 }
 
 export interface CreateCampaignDTO {
-  projectName: string;
+  campaignName: string;
+  tokenContractAddress: string;
   tokenSymbol: string;
   type: CampaignType;
-  budget: number;
+  budget?: number;
   keywords: string[];
   mentionAccount?: string;
   minKarma?: number;

@@ -46,7 +46,7 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onJoin }) 
         <div className={`w-14 h-14 ${gradient}`} style={{ imageRendering: 'pixelated' }} />
         <div>
           <h3 className="text-[13px] text-gray-200 mb-2" >
-            {campaign.projectName}
+            {campaign.campaignName}
           </h3>
           <p className="text-[8px] text-gray-500" >
             {campaign.type === 'community' ? 'COMMUNITY' : 'KOL EXCLUSIVE'}

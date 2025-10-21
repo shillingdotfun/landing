@@ -11,7 +11,8 @@ export class CampaignFactory {
     
     const campaign: Campaign = {
       id: faker.string.uuid(),
-      projectName: `$${faker.word.noun().toUpperCase()}`,
+      tokenContractAddress: `$${faker.number.hex({min: 10, max: 10})}`,
+      campaignName: `$${faker.word.noun().toUpperCase()}`,
       tokenSymbol: faker.word.noun().substring(0, 4).toUpperCase(),
       type,
       status: 'active' as CampaignStatus,

@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaLightbulb, FaTrash } from 'react-icons/fa6';
 
+import solanaLogo from '../assets/images/solana-logo.svg'
+
 import { CampaignType, CreateCampaignDTO } from '../types/campaign.types';
 
 import { useCreateCampaign } from '../hooks/campaign/useCreateCampaign';
@@ -13,17 +15,21 @@ import Button from '../components/Common/Button';
 import GenericTextInput from '../components/Common/inputs/GenericTextInput';
 import GenericNumberInput from '../components/Common/inputs/GenericNumberInput';
 import ContentBlock from '../components/Common/layouts/ContentBlock';
+import GenericTextArea from '../components/Common/inputs/GenericTextArea';
+import GenericDateInput from '../components/Common/inputs/GenericDateInput';
 
 export const CreateCampaign: React.FC = () => {
   const navigate = useNavigate();
   const { addNotification } = useToasts();
-  const { createCampaign, loading, error, response } = useCreateCampaign();
+  const { createCampaign, loading, response } = useCreateCampaign();
 
   const [formData, setFormData] = useState<CreateCampaignDTO>({
-    projectName: '',
+    campaignName: '',
     tokenSymbol: '',
+    tokenContractAddress: '',
     type: CampaignType.COMMUNITY,
-    budget: 0,
+    budget: undefined,
+    maxParticipants: undefined,
     keywords: [''],
     mentionAccount: '',
     startsAt: new Date().toISOString().slice(0, 16),
@@ -110,22 +116,45 @@ export const CreateCampaign: React.FC = () => {
         <div className="grid grid-cols-[1fr_400px] gap-8">
           {/* Form */}
           <div className='grid grid-cols-1 gap-4'>
-            {/* Project Info Section */}
-            <ContentBlock title='Project info'>
-              {/* Project Name & Token Symbol */}
-              <div className='flex flex-row gap-2'>
-                {/* Project Name */}
+            {/* Campaign Info Section */}
+            <ContentBlock title='Campaign info'>
+              <div className='grid grid-cols-2 gap-4'>
+                {/* Name */}
                 <GenericTextInput
-                  value={formData.projectName}
-                  onChange={(e) => handleChange('projectName', e.target.value)}
-                  placeholder="e.g. DegenDAO"
+                  value={formData.campaignName}
+                  onChange={(e) => handleChange('campaignName', e.target.value)}
+                  placeholder="e.g. DegenDAO token launch campaign"
                   required={true}
-                  label='Project name'
-                  hasError={errors.projectName ? true : false}
-                  errorMessages={errors.projectName}
+                  label='Campaign name'
+                  hasError={errors.campaignName ? true : false}
+                  errorMessages={errors.campaignName}
                 />
-
-                {/* Token Symbol */}
+                {/* Budget */}
+                <GenericNumberInput
+                  value={formData.budget}
+                  onChange={(e) => handleChange('budget', parseFloat(e.target.value))}
+                  placeholder="0.00"
+                  min={0.00}
+                  step={0.01}
+                  required={true}
+                  label='Campaign budget (SOL)'
+                  hasError={errors.budget ? true : false}
+                  errorMessages={errors.budget}
+                  iconSource={<img className='h-4 w-4' src={solanaLogo} />}
+                />
+              </div>
+              <div className='grid grid-cols-2 gap-4'>
+                {/* CA */}
+                <GenericTextInput
+                  value={formData.tokenContractAddress}
+                  onChange={(e) => handleChange('tokenContractAddress', e.target.value)}
+                  placeholder="e.g. So11111111111111111111111111111111111111111"
+                  required={true}
+                  label='Token contract address'
+                  hasError={errors.tokenContractAddress ? true : false}
+                  errorMessages={errors.tokenContractAddress}
+                />
+                {/* Symbol */}
                 <GenericTextInput
                   value={formData.tokenSymbol}
                   onChange={(e) => handleChange('tokenSymbol', e.target.value)}
@@ -136,22 +165,20 @@ export const CreateCampaign: React.FC = () => {
                   errorMessages={errors.tokenSymbol}
                 />
               </div>
-
-              {/* Budget */}
-              <GenericNumberInput
-                value={formData.budget}
-                onChange={(e) => handleChange('budget', parseFloat(e.target.value) || 0)}
-                placeholder="25000"
-                required={true}
-                label='Campaign budget'
-                hasError={errors.budget ? true : false}
-                errorMessages={errors.budget}
-              />
+              <div className='grid grid-cols-1 gap-4'>
+                {/* Description */}
+                <GenericTextArea
+                  label={'Campaign description'}
+                  rows={5}
+                  maxLength={500}
+                  showCharCount={true}
+                />
+              </div>
             </ContentBlock>
 
             {/* Tracking Section */}
             <ContentBlock title='Tracking'>
-              {/* keywords */}
+              {/* Keywords */}
               <div className='mb-8'>
                 <div className='block mb-2'>
                   Keywords <span className='text-red-400'>*</span>
@@ -199,53 +226,36 @@ export const CreateCampaign: React.FC = () => {
 
             {/* Duration Section */}
             <ContentBlock title='Duration'>
+              <div className='grid grid-cols-2 gap-4'>
+                <GenericNumberInput
+                  label='Max number of participans'
+                  value={formData.maxParticipants}
+                  onChange={(e) => handleChange('maxParticipants', parseFloat(e.target.value))}
+                  placeholder='10'
+                  hasError={errors.maxParticipants ? true : false}
+                  errorMessages={errors.maxParticipants}
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 {/* Start Date */}
-                <div>
-                    <label className="block text-[9px] text-gray-400 mb-2" >
-                      START DATE *
-                    </label>
-                    <input
-                      type="datetime-local"
-                      value={formData.startsAt}
-                      onChange={(e) => handleChange('startsAt', e.target.value)}
-                      className="w-full px-4 py-3  border border-[#2a2a35] text-gray-200 text-[10px] focus:border-indigo-500 focus:outline-none transition-colors"
-                      
-                    />
-                    {errors.startsAt && (
-                      <p className="mt-2 text-[7px] text-red-400" >
-                        {errors.startsAt}
-                      </p>
-                    )}
-                </div>
-
+                <GenericDateInput
+                  label='Start date'
+                  value={formData.startsAt}
+                  required={true}
+                  hasError={errors.startsAt ? true : false}
+                  errorMessages={errors.startsAt}
+                />
                 {/* End Date */}
-                <div>
-                    <label className="block text-[9px] text-gray-400 mb-2" >
-                      END DATE *
-                    </label>
-                    <input
-                      type="datetime-local"
-                      value={formData.endsAt}
-                      onChange={(e) => handleChange('endsAt', e.target.value)}
-                      className="w-full px-4 py-3  border border-[#2a2a35] text-gray-200 text-[10px] focus:border-indigo-500 focus:outline-none transition-colors"
-                      
-                    />
-                    {errors.endsAt && (
-                      <p className="mt-2 text-[7px] text-red-400" >
-                        {errors.endsAt}
-                      </p>
-                    )}
-                </div>
+                <GenericDateInput
+                  label='End date'
+                  value={formData.endsAt}
+                  required={true}
+                  hasError={errors.endsAt ? true : false}
+                  errorMessages={errors.endsAt}
+                />
               </div>
             </ContentBlock>
-
-            {/* Error Messages */}
-            {error && (
-              <div className="mb-6 p-4 bg-red-500/10 border border-red-500 text-red-400 text-[8px]" >
-                {error}
-              </div>
-            )}
 
             {/* Submit Button */}
             <div className='flex flex-row justify-end'>

@@ -4,6 +4,9 @@ import ErrorPill from './ErrorPill';
 export interface GenericNumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value?: number;
   name?: string;
+  min?: number;
+  max?:number;
+  step?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   iconSource?: React.ReactNode;
@@ -20,6 +23,9 @@ export interface GenericNumberInputProps extends React.InputHTMLAttributes<HTMLI
 
 const GenericNumberInput = forwardRef<HTMLInputElement, GenericNumberInputProps>(({
   value,
+  min,
+  max,
+  step,
   onChange,
   placeholder,
   iconSource,
@@ -45,12 +51,12 @@ const GenericNumberInput = forwardRef<HTMLInputElement, GenericNumberInputProps>
 
   // Validation logic
   useEffect(() => {
-    const isEmpty = value === undefined || value === null;
-    const isZero = value === 0;
+    //const isEmpty = value === undefined || value === null;
+    //const isZero = value === 0;
     
     // For number inputs, we consider it empty if it's undefined/null
     // Zero is a valid value, so we don't treat it as empty
-    const shouldBeInvalid = hasError || (required && isEmpty && !isZero);
+    const shouldBeInvalid = hasError /*&|| (required & isEmpty && !isZero)*/;
     setIsInvalid(shouldBeInvalid);
   }, [hasError, required, value]);
 
@@ -154,6 +160,10 @@ const GenericNumberInput = forwardRef<HTMLInputElement, GenericNumberInputProps>
         placeholder={placeholder}
         disabled={disabled}
         required={required}
+        min={min}
+        max={max}
+        step={step}
+        inputMode='decimal'
         className={inputClasses}
         {...props}
       />

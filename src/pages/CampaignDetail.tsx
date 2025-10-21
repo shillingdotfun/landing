@@ -83,7 +83,7 @@ export const CampaignDetail: React.FC = () => {
               <div className="flex-1">
                 <div className="flex items-center gap-4 mb-4">
                   <h1 className="text-2xl text-gray-200" >
-                    {campaign.projectName}
+                    {campaign.campaignName}
                   </h1>
                   <span className="px-3 py-1 bg-indigo-500/20 text-indigo-400 text-[8px] border border-indigo-500" >
                     {campaign.status.toUpperCase()}

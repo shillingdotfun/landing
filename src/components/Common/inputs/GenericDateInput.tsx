@@ -1,9 +1,10 @@
 import React, { forwardRef, useEffect, useState, useMemo } from 'react';
 import ErrorPill from './ErrorPill';
 
-export interface GenericTextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+export interface GenericDateInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
+  value?: string; // ISO string format from Laravel (e.g., "2024-01-15T14:30:00.000Z")
+  name?: string;
+  onChange?: (isoString: string) => void; // Returns ISO string for Laravel
   placeholder?: string;
   iconSource?: React.ReactNode;
   label?: string;
@@ -14,15 +15,13 @@ export interface GenericTextAreaProps extends React.TextareaHTMLAttributes<HTMLT
   disabled?: boolean;
   errorPosition?: boolean;
   required?: boolean;
-  rows?: number;
-  maxLength?: number;
-  showCharCount?: boolean;
-  name?: string;
   containerClassName?: string;
+  minDate?: string; // ISO string
+  maxDate?: string; // ISO string
 }
 
-const GenericTextArea = forwardRef<HTMLTextAreaElement, GenericTextAreaProps>(({
-  value = '',
+const GenericDateInput = forwardRef<HTMLInputElement, GenericDateInputProps>(({
+  value,
   onChange,
   placeholder,
   iconSource,
@@ -34,12 +33,11 @@ const GenericTextArea = forwardRef<HTMLTextAreaElement, GenericTextAreaProps>(({
   disabled = false,
   errorPosition = false,
   required = false,
-  rows = 4,
-  maxLength,
-  showCharCount = false,
   className = '',
   name,
   containerClassName = '',
+  minDate,
+  maxDate,
   ...props
 }, ref) => {
 
@@ -51,10 +49,61 @@ const GenericTextArea = forwardRef<HTMLTextAreaElement, GenericTextAreaProps>(({
 
   // Validation logic
   useEffect(() => {
-    const isEmpty = !value || value.trim() === '';
+    const isEmpty = !value || value === '';
     const shouldBeInvalid = hasError || (required && isEmpty);
     setIsInvalid(shouldBeInvalid);
   }, [hasError, required, value]);
+
+  // ============================================================================
+  // DATE CONVERSION HELPERS
+  // ============================================================================
+
+  // Convert ISO string to datetime-local format (YYYY-MM-DDTHH:MM)
+  const toDatetimeLocal = (isoString?: string): string => {
+    if (!isoString) return '';
+    
+    try {
+      const date = new Date(isoString);
+      // Format to YYYY-MM-DDTHH:MM (datetime-local format)
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    } catch (error) {
+      console.error('Error converting date:', error);
+      return '';
+    }
+  };
+
+  // Convert datetime-local format to ISO string for Laravel
+  const toISOString = (datetimeLocal: string): string => {
+    if (!datetimeLocal) return '';
+    
+    try {
+      // datetime-local format: YYYY-MM-DDTHH:MM
+      // We need to add seconds and convert to ISO
+      const date = new Date(datetimeLocal);
+      return date.toISOString();
+    } catch (error) {
+      console.error('Error converting to ISO:', error);
+      return '';
+    }
+  };
+
+  // ============================================================================
+  // EVENT HANDLERS
+  // ============================================================================
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const datetimeLocalValue = e.target.value;
+    if (onChange) {
+      const isoString = toISOString(datetimeLocalValue);
+      onChange(isoString);
+    }
+  };
 
   // ============================================================================
   // COMPUTED VALUES
@@ -62,22 +111,7 @@ const GenericTextArea = forwardRef<HTMLTextAreaElement, GenericTextAreaProps>(({
 
   const hasErrors = useMemo(() => errorMessages.length > 0, [errorMessages]);
   
-  const currentLength = useMemo(() => value.length, [value]);
-  
-  const characterCountInfo = useMemo(() => {
-    if (!showCharCount || !maxLength) return null;
-    
-    const isNearLimit = currentLength > maxLength * 0.8;
-    const isAtLimit = currentLength >= maxLength;
-    
-    return {
-      isNearLimit,
-      isAtLimit,
-      display: `${currentLength}/${maxLength}`
-    };
-  }, [showCharCount, maxLength, currentLength]);
-
-  const textareaClasses = useMemo(() => {
+  const inputClasses = useMemo(() => {
     const baseClasses = [
       'rounded-lg',
       'resize-none',
@@ -121,7 +155,7 @@ const GenericTextArea = forwardRef<HTMLTextAreaElement, GenericTextAreaProps>(({
     if (!label) return null;
 
     return (
-      <label htmlFor={name} className="block items-center flex flex-row mb-1 text-sm">
+      <label htmlFor={name ?? ''} className="block items-center flex flex-row mb-1 text-sm">
         <span>{label}</span>
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -144,57 +178,38 @@ const GenericTextArea = forwardRef<HTMLTextAreaElement, GenericTextAreaProps>(({
     <>
       {/* Left icon */}
       {iconSource && (
-        <div className="absolute top-2 left-2 pointer-events-none">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           {iconSource}
         </div>
       )}
       
       {/* Error icon */}
       {isInvalid && (
-        <div className="absolute top-2 right-2 pointer-events-none">
+        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
           <span className="fa fa-warning text-red-500" />
         </div>
       )}
     </>
   );
 
-  const renderCharacterCount = () => {
-    if (!characterCountInfo) return null;
-
-    const { isAtLimit, isNearLimit, display } = characterCountInfo;
-    
-    const countClasses = [
-      'text-xs mt-1 text-right',
-      isAtLimit ? 'text-red-500' : 
-      isNearLimit ? 'text-palette-primary' : 
-      ''
-    ].join(' ');
-
-    return (
-      <div className={countClasses}>
-        {display}
-      </div>
-    );
-  };
-
-  const renderTextarea = () => (
+  const renderInput = () => (
     <div className="relative">
       {renderIcons()}
-      <textarea
+      <input
         ref={ref}
-        value={value}
-        onChange={onChange}
+        type="datetime-local"
+        value={toDatetimeLocal(value)}
+        name={name}
+        id={name}
+        onChange={handleChange}
         placeholder={placeholder}
         disabled={disabled}
         required={required}
-        rows={rows}
-        maxLength={maxLength}
-        name={name}
-        id={name}
-        className={textareaClasses}
+        min={toDatetimeLocal(minDate)}
+        max={toDatetimeLocal(maxDate)}
+        className={inputClasses}
         {...props}
       />
-      {renderCharacterCount()}
     </div>
   );
 
@@ -211,23 +226,23 @@ const GenericTextArea = forwardRef<HTMLTextAreaElement, GenericTextAreaProps>(({
         </div>
       )}
       
-      {/* Error messages above textarea (if errorPosition is true) */}
+      {/* Error messages above input (if errorPosition is true) */}
       {errorPosition && (
         <div className="mb-1">
           {renderErrorMessages()}
         </div>
       )}
       
-      {/* Textarea field */}
-      {renderTextarea()}
+      {/* Input field */}
+      {renderInput()}
       
-      {/* Error messages below textarea (default position) */}
+      {/* Error messages below input (default position) */}
       {!errorPosition && renderErrorMessages()}
     </div>
   );
 });
 
 // Set display name for debugging
-GenericTextArea.displayName = 'GenericTextArea';
+GenericDateInput.displayName = 'GenericDateInput';
 
-export default GenericTextArea;
+export default GenericDateInput;
