@@ -2,14 +2,23 @@
 ##
 ## Project: Frontend
 ## Repository: https://github.com/shillingdotfun/frontend.git
-## Version: 0.0.1
-## Aim: Deploy the project in AWS S3 static website for Staging environment.
+## Version: 0.0.2
+## Aim: Deploy the project in AWS S3 static website .
 
-name: Release to Staging
+name: Release a new version
 
 # This workflow is triggered manually
 on:
   workflow_dispatch:
+    inputs:
+      env_deploy:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        options:
+          - staging
+          - prod
+        default: staging
 
 # Permission can be added at job level or workflow level
 permissions:
@@ -28,7 +37,7 @@ jobs:
   deploy:
     if: github.event_name == 'workflow_dispatch'
 
-    name: Deploy to Staging
+    name: Deploy version
     runs-on: ubuntu-latest
     environment: staging
 
@@ -51,12 +60,24 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Set environment-specific secrets
+        id: set-secrets
+        run: |
+          echo "Environment selected: ${{ github.event.inputs.env_deploy }}"
+          if [ "${{ github.event.inputs.env_deploy }}" = "prod" ]; then
+            echo "AWS_BUCKET=${{ secrets.PROD_AWS_BUCKET }}" >> $GITHUB_ENV
+            echo "AWS_SSM_PS=${{ secrets.PROD_AWS_SSM_PS }}" >> $GITHUB_ENV
+          else
+            echo "AWS_BUCKET=${{ secrets.STAGING_AWS_BUCKET }}" >> $GITHUB_ENV
+            echo "AWS_SSM_PS=${{ secrets.STAGING_AWS_SSM_PS }}" >> $GITHUB_ENV
+          fi
+
       - name: Download env file from AWS SSM Parameter Store
         run: |
           aws ssm \
             get-parameter \
             --with-decryption \
-            --name ${{ secrets.AWS_SSM_PS }} \
+            --name "$AWS_SSM_PS" \
             --output text \
             --query 'Parameter.Value' \
             > .env
@@ -70,12 +91,11 @@ jobs:
         run: |
           npm run build
           echo "Build completed"
-          exit 0
 
       - name: Upload to S3
         working-directory: ${{ env.DIR_TO_UPLOAD }}
         run: |
-          aws s3 sync ./ s3://${{ secrets.AWS_BUCKET }} --delete
+          aws s3 sync ./ "s3://$AWS_BUCKET" --delete
 
       - name: Set emoji status
         if: always()
@@ -94,12 +114,20 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "Release Frontend to Staging - Status: ${{ job.status }}"
+            text: "Release Frontend to ${{ github.event.inputs.env_deploy }} - Status: ${{ job.status }}"
             blocks:
               - type: "section"
                 text:
                   type: "mrkdwn"
-                  text: "${{ env.EMOJI_STATUS }} *Deployment Status:* `${{ job.status }}`"
+                  text: "${{ env.EMOJI_STATUS }} *Deployment status:* `${{ job.status }}`"
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: "*Environment:* ${{ env.ENV_TO_DEPLOY }}"
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: "*Workflow:* ${{ github.workflow }}"
               - type: "section"
                 text:
                   type: "mrkdwn"
@@ -112,10 +140,6 @@ jobs:
                 text:
                   type: "mrkdwn"
                   text: "*Commit:* ${{ github.sha }}"
-              - type: "section"
-                text:
-                  type: "mrkdwn"
-                  text: "*Workflow:* ${{ github.workflow }}"
               - type: "section"
                 text:
                   type: "mrkdwn"
