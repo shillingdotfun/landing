@@ -1,8 +1,13 @@
 // src/types/campaign.types.ts
 
-export enum CampaignType {
-  COMMUNITY = 'community',
-  KOL_EXCLUSIVE = 'kol_exclusive'
+import { User } from "./user.types";
+
+export interface CampaignType {
+  id: string;
+  name: string;
+  label: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export enum CampaignStatus {
@@ -15,6 +20,7 @@ export enum CampaignStatus {
 export interface Campaign {
   id: string;
   campaignName: string;
+  campaignCreatorUser: User;
   campaignDescription?: string;
   tokenContractAddress: string;
   tokenSymbol: string;
@@ -56,7 +62,7 @@ export interface CreateCampaignDTO {
   campaignDescription?: string;
   tokenContractAddress: string;
   tokenSymbol: string;
-  type: CampaignType;
+  campaignType: string;
   budget?: number;
   keywords: string[];
   mentionAccount?: string;

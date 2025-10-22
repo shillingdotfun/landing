@@ -29,7 +29,7 @@ export const campaignsHandlers = [
       campaigns = campaigns.filter(c => c.status === status);
     }
     if (type) {
-      campaigns = campaigns.filter(c => c.type === type);
+      campaigns = campaigns.filter(c => c.type.name === type);
     }
     
     const total = campaigns.length;
@@ -63,6 +63,7 @@ export const campaignsHandlers = [
     return HttpResponse.json({
       data: campaigns,
       message: 'Active campaigns retrieved successfully',
+      success: true,
     });
   }),
 
@@ -81,7 +82,9 @@ export const campaignsHandlers = [
     }
     
     return HttpResponse.json({
+      message: 'OK',
       data: campaign,
+      success: true,
     });
   }),
 
@@ -98,7 +101,8 @@ export const campaignsHandlers = [
           errors: {
             campaignName: body.campaignName ? [] : ['Campaign name is required'],
             budget: body.budget ? [] : ['Budget is required'],
-          }
+          },
+          success: false
         },
         { status: 422 }
       );
@@ -107,7 +111,6 @@ export const campaignsHandlers = [
     const newCampaign = CampaignFactory.create({
       campaignName: body.campaignName,
       tokenSymbol: body.tokenSymbol,
-      type: body.type,
       budget: body.budget,
       keywords: body.keywords,
       mentionAccount: body.mentionAccount,

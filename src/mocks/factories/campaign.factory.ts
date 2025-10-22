@@ -2,15 +2,31 @@
 
 import { faker } from '@faker-js/faker';
 import { Campaign, CampaignType, CampaignStatus } from '../../types/campaign.types';
+import { User } from '../../types/user.types';
 
 export class CampaignFactory {
   static create(overrides?: Partial<Campaign>): Campaign {
-    const type = faker.helpers.arrayElement(['community', 'kol_exclusive']) as CampaignType;
+    const type = faker.helpers.arrayElement([
+      {
+        name: 'community',
+      },
+      {
+        name: 'kol_exclusive'
+      }
+    ]) as CampaignType;
     const budget = faker.number.int({ min: 5000, max: 100000 });
     const participantsCount = faker.number.int({ min: 10, max: 300 });
     
     const campaign: Campaign = {
       id: faker.string.uuid(),
+      campaignCreatorUser: {
+        id: faker.string.uuid(),
+        name: faker.word.noun(),
+        email: 'fake@email.com',
+        created_at: faker.date.past().toISOString(),
+        updated_at: faker.date.recent().toISOString(),
+        wallet_address: faker.number.hex(65656565656565)
+      } as User,
       tokenContractAddress: `$${faker.number.hex({min: 10, max: 10})}`,
       campaignName: `$${faker.word.noun().toUpperCase()}`,
       tokenSymbol: faker.word.noun().substring(0, 4).toUpperCase(),
@@ -20,8 +36,8 @@ export class CampaignFactory {
       budget,
       distributedAmount: faker.number.int({ min: 0, max: budget * 0.5 }),
       
-      minKarma: type === 'kol_exclusive' ? faker.number.int({ min: 1000, max: 10000 }) : undefined,
-      maxParticipants: type === 'kol_exclusive' ? faker.number.int({ min: 5, max: 20 }) : undefined,
+      minKarma: type.name === 'kol_exclusive' ? faker.number.int({ min: 1000, max: 10000 }) : undefined,
+      maxParticipants: type.name === 'kol_exclusive' ? faker.number.int({ min: 5, max: 20 }) : undefined,
       
       keywords: [
         `#${faker.word.noun()}`,

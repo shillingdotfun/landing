@@ -6,7 +6,7 @@ import { FaLightbulb, FaTrash } from 'react-icons/fa6';
 
 import solanaLogo from '../assets/images/solana-logo.svg'
 
-import { CampaignType, CreateCampaignDTO } from '../types/campaign.types';
+import { CreateCampaignDTO } from '../types/campaign.types';
 
 import { useCreateCampaign } from '../hooks/campaign/useCreateCampaign';
 import { useToasts } from '../hooks/useToast';
@@ -28,7 +28,7 @@ export const CreateCampaign: React.FC = () => {
     campaignDescription: '',
     tokenSymbol: '',
     tokenContractAddress: '',
-    type: CampaignType.COMMUNITY,
+    campaignType: 'community', //TODO: Remove this preset when the other types will be ready
     budget: undefined,
     maxParticipants: undefined,
     keywords: [''],
@@ -245,6 +245,7 @@ export const CreateCampaign: React.FC = () => {
                 {/* Start Date */}
                 <GenericDateInput
                   label='Start date'
+                  onChange={(isoString) => handleChange('startsAt', isoString)}
                   value={formData.startsAt}
                   required={true}
                   hasError={errors.startsAt ? true : false}
@@ -253,6 +254,7 @@ export const CreateCampaign: React.FC = () => {
                 {/* End Date */}
                 <GenericDateInput
                   label='End date'
+                  onChange={(isoString) => handleChange('endsAt', isoString)}
                   value={formData.endsAt}
                   required={true}
                   hasError={errors.endsAt ? true : false}
