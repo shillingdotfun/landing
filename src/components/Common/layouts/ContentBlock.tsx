@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 
 interface ContentBlockProps {
   children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   title?: string;
   subtitle?: string;
