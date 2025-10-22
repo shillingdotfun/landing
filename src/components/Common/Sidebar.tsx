@@ -30,7 +30,6 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
   return (
     <aside 
       className={`
-        bg-purple-700
         bg-[#3e2b56]
         fixed sm:static z-40 h-screen flex flex-col transition-[width,transform] duration-300 ease-in-out
         ${show ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
