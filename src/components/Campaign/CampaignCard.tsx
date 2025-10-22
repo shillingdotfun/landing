@@ -1,109 +1,79 @@
 // src/components/campaigns/CampaignCard.tsx
 
-import React, { useState } from 'react';
-import { Campaign } from '../../types/campaign.types';
-import { getRandomGradient } from '../../utils/constants';
-import { formatCurrency, formatTimeRemaining } from '../../utils/formatters';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../Common/Button';
-import { useToasts } from '../../hooks/useToast';
-import ContentBlock from '../Common/layouts/ContentBlock';
 
+import { Campaign } from '../../types/campaign.types';
+
+import { formatCurrency, formatTimeRemaining } from '../../utils/formatters';
+
+import Button from '../Common/Button';
+import ContentBlock from '../Common/layouts/ContentBlock';
 
 interface CampaignCardProps {
   campaign: Campaign;
-  onJoin: (campaignId: string) => Promise<{ success: boolean; error?: string }>;
 }
 
-export const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onJoin }) => {
-  const { addNotification } = useToasts();
+export const CampaignCard: React.FC<CampaignCardProps> = ({ campaign }) => {
   const navigate = useNavigate();
-  const [isJoining, setIsJoining] = useState(false);
-  const [joined, setJoined] = useState(false);
 
   const handleCardClick = () => {
     navigate(`/campaigns/${campaign.id}`);
   };
 
   const handleJoin = async () => {
-    setIsJoining(true);
-    const result = await onJoin(campaign.id);
-    setIsJoining(false);
-    
-    if (result.success) {
-      setJoined(true);
-      setTimeout(() => setJoined(false), 3000);
-    } else {
-      addNotification(result.error || 'Failed to join campaign', 'error');
-    }
+    navigate(`/campaigns/${campaign.id}`);
   };
 
-  const gradient = getRandomGradient();
-  const isCommunity = campaign.type === 'community';
+  const isCommunity = campaign.type.name === 'community';
 
   return (
-    <ContentBlock onClick={handleCardClick} className="border border-[#2a2a35] transition-all hover:-translate-y-1 cursor-pointer">
-      <div className="flex items-center gap-4 mb-5">
-        <div className={`w-14 h-14 rounded-full ${gradient}`} style={{ imageRendering: 'pixelated' }} />
-        <div>
-          <h3 className="text-[13px]  mb-2" >
-            {campaign.campaignName}
-          </h3>
-          <p className="text-[8px] " >
-            {campaign.type === 'community' ? 'COMMUNITY' : 'KOL EXCLUSIVE'}
-          </p>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-2 gap-4 my-5 p-4 bg-purple-500/60 rounded">
+    <ContentBlock
+      onClick={handleCardClick} 
+      title={campaign.campaignName} 
+      subtitle={campaign.type.name === 'community' ? 'Community' : 'KOL Exclusive'} 
+      className="border border-transparent hover:border-purple-100 transition-all hover:-translate-y-1 cursor-pointer"
+    >
+      <div className="grid grid-cols-3 gap-2 my-2 p-2 bg-purple-100 text-[#3e2b56] rounded">
         <div className="flex flex-col gap-1">
           <div className="text-xs" >
             {isCommunity ? 'POOL' : 'BUDGET'}
           </div>
-          <div className="text-sm text-green-400" >
+          <div className="text-sm text-green-600 font-bold" >
             {formatCurrency(campaign.budget)}
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <div className="text-xs" >
+          <div className="text-xs">
             ENDS IN
           </div>
-          <div className="text-sm " >
+          <div className="text-sm">
             {formatTimeRemaining(campaign.endsAt)}
-          </div>
-        </div>
-        <div className="flex flex-col gap-1">
-          <div className="text-xs" >
-            {isCommunity ? 'ENGAGEMENT' : 'MIN KARMA'}
-          </div>
-          <div className="text-sm " >
-            {isCommunity ? formatCurrency(campaign.totalEngagement) : campaign.minKarma?.toLocaleString()}
           </div>
         </div>
         <div className="flex flex-col gap-1">
           <div className="text-xs" >
             {isCommunity ? 'AVG REWARD' : 'SPOTS'}
           </div>
-          <div className="text-sm text-green-400" >
+          <div className="text-sm text-green-600 font-bold" >
             {isCommunity 
-              ? formatCurrency(campaign.averageReward || 0)
+              ? `${formatCurrency(campaign.budget / campaign.participantsCount)} SOL` 
               : `${campaign.participantsCount}/${campaign.maxParticipants}`
             }
           </div>
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-4 pt-4 border-t border-[#2a2a35]">
-        <span className="text-[8px]" >
+      <div className="flex justify-between items-center pt-2 border-t border-[#2a2a35]">
+        <span className="text-xs" >
           {isCommunity 
-            ? `${campaign.participantsCount} PARTICIPANTS`
+            ? `${campaign.participantsCount} Shillers`
             : 'VERIFIED KOLS ONLY'
           }
         </span>
         <Button
           onClick={handleJoin}
-          disabled={isJoining || joined}
-          label={joined ? 'JOINED!' : isJoining ? 'JOINING...' : isCommunity ? 'JOIN' : 'APPLY'}
+          label={'Join'}
         />
       </div>
     </ContentBlock>

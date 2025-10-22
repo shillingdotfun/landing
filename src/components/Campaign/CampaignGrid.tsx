@@ -1,17 +1,25 @@
 // src/components/campaigns/CampaignGrid.tsx
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCampaigns } from '../../hooks/campaign/useCampaigns';
 import { CampaignCard } from './CampaignCard';
 import { ErrorMessage } from '../Common/ErrorMessage';
 import { Spinner } from '../Common/Spinner';
+import { Campaign } from '../../types/campaign.types';
 
 interface CampaignGridProps {
   limit?: number;
 }
 
 export const CampaignGrid: React.FC<CampaignGridProps> = ({ limit = 4 }) => {
-  const { campaigns, loading, error, joinCampaign } = useCampaigns();
+  const { response, loading, error } = useCampaigns();
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+
+  useEffect(() => {
+    if (response?.success && response.data) {
+      setCampaigns(response.data)
+    }
+  }, [response])
 
   if (loading) {
     return (
@@ -29,11 +37,10 @@ export const CampaignGrid: React.FC<CampaignGridProps> = ({ limit = 4 }) => {
 
   return (
     <div className="grid grid-cols-3 gap-5">
-      {displayCampaigns.map(campaign => (
+      {displayCampaigns.map((campaign: Campaign) => (
         <CampaignCard 
           key={campaign.id} 
           campaign={campaign}
-          onJoin={joinCampaign}
         />
       ))}
     </div>

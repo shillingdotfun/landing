@@ -17,7 +17,7 @@ interface Participant {
 }
 
 export const useCampaignDetail = (campaignId: string) => {
-  const [campaign, setCampaign] = useState<Campaign | null>(null);
+  const [campaign, setCampaign] = useState<Campaign>();
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,28 +37,18 @@ export const useCampaignDetail = (campaignId: string) => {
       setCampaign(campaignResponse.data);
       
       // Fetch participants
-      const participantsResponse = await campaignsService.getParticipants(campaignId);
-      setParticipants(participantsResponse.data);
+      const participantsResponse = await campaignsService.getParticipants(campaignId); // TODO: Extract
+      setParticipants(participantsResponse.data ?? []);
       
       // Fetch activities
-      const activitiesResponse = await activityService.getStream({ campaignId, perPage: 20 });
-      setActivities(activitiesResponse.data);
+      const activitiesResponse = await activityService.getStream({ campaignId, perPage: 20 }); // TODO: Extract
+      setActivities(activitiesResponse.data ?? []);
       
       setError(null);
     } catch (err: any) {
       setError(err.message || 'Error loading campaign');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const joinCampaign = async (id: string) => {
-    try {
-      await campaignsService.join(id);
-      await fetchCampaignData(); // Refresh data
-      return { success: true };
-    } catch (err: any) {
-      return { success: false, error: err.message };
     }
   };
 
@@ -69,6 +59,5 @@ export const useCampaignDetail = (campaignId: string) => {
     loading,
     error,
     refetch: fetchCampaignData,
-    joinCampaign,
   };
 };
