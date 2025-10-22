@@ -5,7 +5,7 @@ const NotificationToast: React.FC = () => {
   const { notifications, removeNotification } = useToasts();
 
   return (
-    <div className="fixed top-0 sm:right-40 right-2 m-4 z-100 flex flex-col gap-3">
+    <div className="fixed top-0 sm:right-40 right-2 m-4 z-[100] flex flex-col gap-3">
       {notifications.map((notification) => (
         <div
           key={notification.id}
