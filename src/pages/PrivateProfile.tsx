@@ -273,9 +273,9 @@ const PrivateProfile: React.FC = () => {
           className='h-fit bg-gradient-to-r from-purple-500 to-blue-500 sm:from-purple-500/50 sm:to-blue-500/50'
         >
           <div className='grid grid-cols-2 gap-4 mb-6'>
-            <div className="bg-slate-100/30 flex flex-row rounded-lg">
+            <div className="bg-yellow-400 text-black flex flex-row rounded-lg">
               <div className="ml-[18px] flex h-[70px] w-auto flex-row items-center">
-                <div className="rounded-full bg-lightPrimary sm:p-3">
+                <div className="rounded-full sm:p-3">
                   <FaBoltLightning className="text-[24px]"/>
                 </div>
               </div>
@@ -287,7 +287,7 @@ const PrivateProfile: React.FC = () => {
 
             <div className="bg-slate-100/30 flex flex-row rounded-lg text-white">
               <div className="ml-[18px] flex h-[70px] w-auto flex-row items-center">
-                <div className="rounded-full bg-lightPrimary sm:p-3">
+                <div className="rounded-full sm:p-3">
                   <img src={solanaLogoWhite} className="h-[24px]" alt="SOL logo"/>
                 </div>
               </div>

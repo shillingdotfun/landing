@@ -80,6 +80,7 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
       {/* Menu */}
       <div className='flex flex-col justify-between flex-grow'>
         <div className='flex flex-col gap-8'>
+          {/* User menu */}
           {isAuthenticated && (
             <div className='px-4'>
               <a
@@ -114,6 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
             </div>
           )}
 
+          {/* Mid menu */}
           <ul className='px-4'>
             {menuItems.map((item) => (
               <li key={item.path}>
