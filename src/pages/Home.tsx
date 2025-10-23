@@ -4,7 +4,6 @@ import React from 'react';
 //import allColors from "../assets/images/shilling-logo/all-colors.gif"
 
 import { CampaignGrid } from '../components/Campaign/CampaignGrid';
-import { KOLMiniRanking } from '../components/KOL/KolMiniRanking';
 import { KOLRankingTable } from '../components/KOL/KOLRanking';
 import { ActivityFeed } from '../components/LiveFeed/ActivityFeed';
 import PublicLayout from '../components/Common/layouts/PublicLayout';
@@ -50,7 +49,6 @@ export const Home: React.FC = () => {
           {/* Sidebar */}
           <aside className="flex flex-col gap-8">
             <ActivityFeed />
-            <KOLMiniRanking />
           </aside>
         </div>
       </div>
