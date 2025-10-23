@@ -17,13 +17,20 @@ export enum CampaignStatus {
   CANCELLED = 'cancelled'
 }
 
+export interface Participant extends User {
+  joinedAt: string;
+  totalTweets: number;
+  engagementScore: number;
+  earnedAmount: number;
+}
+
 export interface Campaign {
   id: string;
   campaignName: string;
   campaignCreatorUser: User;
   campaignDescription?: string;
   tokenContractAddress: string;
-  tokenSymbol: string;
+  tokenSymbol?: string;
   type: CampaignType;
   status: CampaignStatus;
   
@@ -43,6 +50,7 @@ export interface Campaign {
   totalTweets: number;
   totalEngagement: number;
   totalImpressions: number;
+  participants: Participant[],
   participantsCount: number;
   
   // Dates
@@ -61,7 +69,7 @@ export interface CreateCampaignDTO {
   campaignName: string;
   campaignDescription?: string;
   tokenContractAddress: string;
-  tokenSymbol: string;
+  tokenSymbol?: string;
   campaignType: string;
   budget?: number;
   keywords: string[];

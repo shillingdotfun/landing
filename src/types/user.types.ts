@@ -4,11 +4,11 @@ export interface User {
   email: string;
   email_verified_at?: string | null;
   password?: string;
-  wallet_address?: string | null;
+  walletAddress?: string | null;
   created_at: string;
   updated_at: string;
 }
 
 export type UserUpdatePayload = Partial<Pick<User, 
-  'name' | 'email' | 'wallet_address'
+  'name' | 'email' | 'walletAddress'
 >>;

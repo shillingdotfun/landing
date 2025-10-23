@@ -1,13 +1,13 @@
 // src/utils/formatters.ts
 
-export const formatCurrency = (amount: number): string => {
+export const formatCurrency = (amount: number, currency?: string): string => {
   if (amount >= 1000000) {
-    return `$${(amount / 1000000).toFixed(1)}M`;
+    return `${(amount / 1000000).toFixed(1)}M ${currency}`;
   }
   if (amount >= 1000) {
-    return `$${(amount / 1000).toFixed(1)}K`;
+    return `${(amount / 1000).toFixed(1)}K ${currency}`;
   }
-  return `$${amount.toFixed(0)}`;
+  return `${amount.toFixed(0)} ${currency}`;
 };
 
 export const formatNumber = (num: number): string => {

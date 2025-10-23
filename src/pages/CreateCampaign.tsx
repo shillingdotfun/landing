@@ -150,7 +150,6 @@ export const CreateCampaign: React.FC = () => {
                   value={formData.tokenContractAddress}
                   onChange={(e) => handleChange('tokenContractAddress', e.target.value)}
                   placeholder="So11111111111111111111111111111111111111111"
-                  required={true}
                   label='Token contract address'
                   hasError={errors.tokenContractAddress ? true : false}
                   errorMessages={errors.tokenContractAddress}
@@ -231,11 +230,13 @@ export const CreateCampaign: React.FC = () => {
             {/* Duration Section */}
             <ContentBlock title='Duration'>
               <div className='grid grid-cols-2 gap-4'>
+                {/* Max participants */}
                 <GenericNumberInput
                   label='Max number of participans'
                   value={formData.maxParticipants}
                   onChange={(e) => handleChange('maxParticipants', parseFloat(e.target.value))}
                   placeholder='10'
+                  min={0}
                   hasError={errors.maxParticipants ? true : false}
                   errorMessages={errors.maxParticipants}
                 />
