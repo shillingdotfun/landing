@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useState } from 'react'
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { GrLogout } from "react-icons/gr";
+import { GrLogout, GrUser } from "react-icons/gr";
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 
 import longLogoBlack from "../../assets/images/shilling-logo/large/white-transparent.svg"
@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, userProfile, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(isMobile ? false : true);
   
   const toggleCollapse = () => {
@@ -79,47 +79,83 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
       
       {/* Menu */}
       <div className='flex flex-col justify-between flex-grow'>
-        <ul className='px-4'>
-          {menuItems.map((item) => (
-            <li key={item.path}>
-              <Link
-                to={item.path}
-                className={`block mb-2 group relative rounded-md transition-colors duration-200 hover:text-purple-700 ${
-                  location.pathname === item.path ? "bg-purple-300 text-purple-700" : "hover:bg-purple-300"
-                }`}
-                onClick={() => {
-                  if (window.innerWidth < 640) {
-                    onClose();
-                  }
-                }}
-                title={isCollapsed ? item.name : undefined}
+        <div className='flex flex-col gap-8'>
+          {isAuthenticated && (
+            <div className='px-4'>
+              <a
+                className={`block mb-2 group relative rounded-md transition-colors duration-200 hover:bg-purple-300`}
+                href="/profile"
+                title={isCollapsed ? "Profile" : "Profile"}
+                rel="noopener"
               >
-                <div className={`flex flex-row items-center gap-2 p-2 ${
+                <div className={`flex flex-row items-center border border-purple-200/30 rounded-md gap-2 p-2 ${
                   isCollapsed ? 'justify-center items-center text-center' : 'justify-start'
                 }`}>
                   {/* Icon */}
                   <span className={`flex-shrink-0 ${isCollapsed ? 'sm:text-xl' : ''}`}>
-                    {item.icon}
+                    <GrUser/>
                   </span>
                   
                   {/* Text */}
                   <span className={`overflow-hidden whitespace-nowrap transition-opacity duration-200 ${
                     isCollapsed ? 'hidden' : 'opacity-100'
                   }`}>
-                    {item.name}
+                    {userProfile?.name}
                   </span>
                 </div>
                 
                 {/* Tooltip for collapsed mode */}
                 {isCollapsed && (
                   <div className="hidden bg-purple-600 sm:block absolute left-full top-1/2 transform -translate-y-1/2 ml-2 px-2 py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap text-purple-100">
-                    {item.name}
+                    Profile
                   </div>
                 )}
-              </Link>
-            </li>
-          ))}
-        </ul>
+              </a>
+            </div>
+          )}
+
+          <ul className='px-4'>
+            {menuItems.map((item) => (
+              <li key={item.path}>
+                <Link
+                  to={item.path}
+                  className={`block mb-2 group relative rounded-md transition-colors duration-200 hover:text-purple-700 ${
+                    location.pathname === item.path ? "bg-purple-300 text-purple-700" : "hover:bg-purple-300"
+                  }`}
+                  onClick={() => {
+                    if (window.innerWidth < 640) {
+                      onClose();
+                    }
+                  }}
+                  title={isCollapsed ? item.name : undefined}
+                >
+                  <div className={`flex flex-row items-center gap-2 p-2 ${
+                    isCollapsed ? 'justify-center items-center text-center' : 'justify-start'
+                  }`}>
+                    {/* Icon */}
+                    <span className={`flex-shrink-0 ${isCollapsed ? 'sm:text-xl' : ''}`}>
+                      {item.icon}
+                    </span>
+                    
+                    {/* Text */}
+                    <span className={`overflow-hidden whitespace-nowrap transition-opacity duration-200 ${
+                      isCollapsed ? 'hidden' : 'opacity-100'
+                    }`}>
+                      {item.name}
+                    </span>
+                  </div>
+                  
+                  {/* Tooltip for collapsed mode */}
+                  {isCollapsed && (
+                    <div className="hidden bg-purple-600 sm:block absolute left-full top-1/2 transform -translate-y-1/2 ml-2 px-2 py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap text-purple-100">
+                      {item.name}
+                    </div>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
         
         {/* Footer with logout */}
         {isAuthenticated && (

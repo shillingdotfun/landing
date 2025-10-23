@@ -7,8 +7,9 @@ export interface User {
   walletAddress?: string | null;
   created_at: string;
   updated_at: string;
+  anon: boolean;
 }
 
 export type UserUpdatePayload = Partial<Pick<User, 
-  'name' | 'email' | 'walletAddress'
+  'name' | 'email' | 'walletAddress' | 'anon'
 >>;

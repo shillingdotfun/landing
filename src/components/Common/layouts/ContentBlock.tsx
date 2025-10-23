@@ -28,7 +28,7 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
 }) => {
 
   return (
-    <div className={`p-4 rounded-lg bg-[#3e2b56] ${className}`} onClick={onClick}>
+    <div className={`p-4 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 sm:from-purple-500/50 sm:to-blue-500/50 ${className}`} onClick={onClick}>
       <div className="w-full flex flex-col justify-between items-left mb-6">
         <h3 className={`text-xl font-afacad uppercase font-bold flex flex-row gap-2 items-center ${titleClassName}`}>
           <span>{title}</span>

@@ -38,7 +38,7 @@ export const KOLRankingTable: React.FC<KOLRankingTableProps> = ({ limit = 10 }) 
         <div className="text-center">AVG ENGAGE</div>
         <div className="text-center">STREAK</div>
       </div>
-      {kols.map(kol => (
+      {kols?.map(kol => (
         <KOLRankingRow key={kol.id} kol={kol} />
       ))}
     </div>

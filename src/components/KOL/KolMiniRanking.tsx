@@ -20,7 +20,7 @@ export const KOLMiniRanking: React.FC = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          {kols.map(kol => (
+          {kols?.map(kol => (
             <KOLMiniCard key={kol.id} kol={kol} />
           ))}
         </div>

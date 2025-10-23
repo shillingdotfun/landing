@@ -18,8 +18,8 @@ const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
   
   const menuItems = [
     { name: 'Home', path: '/', icon: <FaHouse />},
-    { name: 'KOLs', path: '/kols', icon: <FaPeopleGroup /> },
-    { name: 'Leaderboard', path: '/leaderboard', icon: <FaCrown /> },
+    { name: 'KOLs', path: '/kols', icon: <FaCrown/> },
+    { name: 'Campaigns', path: '/campaigns', icon: <FaPeopleGroup /> },
     { name: 'Create', path: '/create', icon: <FaPlus /> }
   ]
 

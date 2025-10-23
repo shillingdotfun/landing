@@ -78,7 +78,7 @@ const GenericTextInput = forwardRef<HTMLInputElement, GenericTextInputProps>(({
       iconSource ? 'pl-10' : '',
       
       // Disabled state
-      disabled ? 'bg-slate-100 text-gray-500 cursor-not-allowed' : '',
+      disabled ? 'bg-slate-300 text-gray-500 !cursor-not-allowed' : '',
       
       // Border and shadow
       plain ? '' : 'border shadow-md',
@@ -125,7 +125,7 @@ const GenericTextInput = forwardRef<HTMLInputElement, GenericTextInputProps>(({
     <>
       {/* Left icon */}
       {iconSource && (
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-[#3e2b56]">
           {iconSource}
         </div>
       )}

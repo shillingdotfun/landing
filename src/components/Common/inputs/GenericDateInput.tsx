@@ -131,7 +131,7 @@ const GenericDateInput = forwardRef<HTMLInputElement, GenericDateInputProps>(({
       iconSource ? 'pl-10' : '',
       
       // Disabled state
-      disabled ? 'bg-slate-100 text-gray-500 cursor-not-allowed' : '',
+      disabled ? 'bg-slate-300 text-gray-500 !cursor-not-allowed' : '',
       
       // Border and shadow
       plain ? '' : 'border shadow-md',

@@ -6,6 +6,7 @@ import PrivateRoute from './PrivateRoute';
 import Home from '../pages/Home';
 import CampaignDetail from '../pages/CampaignDetail';
 import CreateCampaign from '../pages/CreateCampaign';
+import PrivateProfile from '../pages/PrivateProfile';
 
 
 const AppRoutes: React.FC = () => {
@@ -16,6 +17,12 @@ const AppRoutes: React.FC = () => {
       <Route path="/campaigns/:id" element={<CampaignDetail />} />
 
       {/* Private routes */}
+      <Route path="/profile" element={
+          <PrivateRoute pageTitle='Profile'>
+            <PrivateProfile />
+          </PrivateRoute>
+        }
+      />
       <Route path="/create" element={
         <PrivateRoute pageTitle='Create campaign'>
           <CreateCampaign />

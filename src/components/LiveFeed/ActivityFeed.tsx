@@ -5,14 +5,15 @@ import { useActivity } from '../../hooks/useActivity';
 import { ActivityItem } from './ActivityItem';
 import { LiveIndicator } from './LiveIndicator';
 import { Spinner } from '../Common/Spinner';
+import ContentBlock from '../Common/layouts/ContentBlock';
 
 
 export const ActivityFeed: React.FC = () => {
   const { activities, loading } = useActivity(20);
 
   return (
-    <div className="border border-[#2a2a35] p-5 top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
-      <div className="flex justify-between items-center mb-5 pb-4 border-b border-[#2a2a35]">
+    <ContentBlock className="top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
+      <div className="flex justify-between items-center mb-5 pb-4">
         <h2 className="text-3xl font-bold font-afacad">
           Live feed
         </h2>
@@ -25,11 +26,11 @@ export const ActivityFeed: React.FC = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {activities.map(activity => (
+          {activities?.map(activity => (
             <ActivityItem key={activity.id} activity={activity} />
           ))}
         </div>
       )}
-    </div>
+    </ContentBlock>
   );
 };
