@@ -20,8 +20,16 @@ export const campaignsService = {
     return await api.get(`/campaigns/${id}`);
   },
 
+  async getPublicById(id: string): Promise<ApiResponse<Campaign>> {
+    return await api.get(`/public/campaigns/${id}`);
+  },
+
   async getActive(): Promise<ApiResponse<Campaign[]>> {
     return await api.get('/campaigns/active');
+  },
+
+  async getPublicActive(): Promise<ApiResponse<Campaign[]>> {
+    return await api.get('/public/campaigns/active');
   },
 
   async create(data: CreateCampaignDTO): Promise<ApiResponse<Campaign>> {

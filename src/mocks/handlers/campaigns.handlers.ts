@@ -183,4 +183,38 @@ export const campaignsHandlers = [
       data: participants,
     });
   }),
+
+  // GET /api/public/campaigns/active
+  http.get(`${API_BASE}/public/campaigns/active`, async () => {
+    await delay(200);
+    
+    const campaigns = getCampaigns().filter(c => c.status === 'active');
+    
+    return HttpResponse.json({
+      data: campaigns,
+      message: 'Active campaigns retrieved successfully',
+      success: true,
+    });
+  }),
+
+  // GET /api/public/campaigns/:id
+  http.get(`${API_BASE}/public/campaigns/:id`, async ({ params }) => {
+    await delay(200);
+    
+    const { id } = params;
+    const campaign = getCampaignById(id as string);
+    
+    if (!campaign) {
+      return HttpResponse.json(
+        { message: 'Campaign not found' },
+        { status: 404 }
+      );
+    }
+    
+    return HttpResponse.json({
+      message: 'OK',
+      data: campaign,
+      success: true,
+    });
+  }),
 ];
