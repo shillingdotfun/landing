@@ -69,6 +69,7 @@ const PrivateProfile: React.FC = () => {
       setProfileData({
         name: userProfile.name ?? '',
         email: userProfile.email ?? '',
+        anon: userProfile.anon ?? false,
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -233,6 +234,12 @@ const PrivateProfile: React.FC = () => {
             onChange={(e) => handleInputChange('anon', e.target.checked)}
           />
           <p className='text-xs -mt-2 mb-6'>Don't show my identity anywhere</p>
+
+          <Button
+            onClick={handleSubmit}
+            disabled={loading}
+            label={loading ? 'Saving...' : 'Save Changes'}
+          />
         </ContentBlock>
       </div>
 
