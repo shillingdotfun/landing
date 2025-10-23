@@ -21,6 +21,7 @@ import GenericTextInput from '../components/Common/inputs/GenericTextInput';
 import ContentBlock from '../components/Common/layouts/ContentBlock';
 import Loader from '../components/Common/Loader';
 import GenericCheckboxInput from '../components/Common/inputs/GenericCheckboxInput';
+import XAuthorizeButton from '../components/Auth/XAuthorize';
 
 const PrivateProfile: React.FC = () => {
   // Privy hooks 
@@ -51,16 +52,15 @@ const PrivateProfile: React.FC = () => {
   const { addNotification } = useToasts();
   const { userProfile, isAuthenticated, loadUserProfile, loading, error } = useAuth();
   const { response, handleUpdateUser, clearFieldError } = useUpdateUserProfile();
-
+  
+  const [pendingChanges, setPendingChanges] = useState<boolean>(false);
+  const [tokenBalance, setTokenBalance] = useState<number | null>(null);
+  const [connectWalletButtonLabel, setConnectWalletButtonLabel] = useState<string>()
   const [profileData, setProfileData] = useState<UserUpdatePayload>({
     name: '',
     email: '',
     anon: false,
   });
-
-  const [tokenBalance, setTokenBalance] = useState<number | null>(null);
-
-  const [connectWalletButtonLabel, setConnectWalletButtonLabel] = useState<string>()
   
   useEffect(() => {
     if (!userProfile) {
@@ -80,6 +80,7 @@ const PrivateProfile: React.FC = () => {
       addNotification(response.message, response?.success ? "success" : "error");
       if (response.success) {
         loadUserProfile();
+        setPendingChanges(false);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,8 +121,9 @@ const PrivateProfile: React.FC = () => {
     handleUpdateUser(profileData);
   };
 
-  const handleInputChange = (field: keyof UserUpdatePayload, value: string|boolean) => {
+  const handleInputChange = (field: keyof UserUpdatePayload, value: string|boolean|any) => {
     setProfileData(prev => ({ ...prev, [field]: value }));
+    setPendingChanges(true);
     if (response?.errors?.[field]) {
       clearFieldError(field);
     }
@@ -173,14 +175,6 @@ const PrivateProfile: React.FC = () => {
     }
   };
 
-  /*
-  const handlePaymentSucceed = () => {
-    setTimeout(() => {
-      loadUserProfile();
-    }, 1000) // We need this timeout because of backend latency
-  }
-  */
-
   if (!isAuthenticated) return <Navigate to="/login" />;
 
   if (!userProfile) {
@@ -195,39 +189,42 @@ const PrivateProfile: React.FC = () => {
         <ContentBlock
           title='Profile Settings'
         >
-          <GenericTextInput
-            label="Public name"
-            iconSource={<FaUser/>}
-            value={profileData.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
-            plain={true}
-            hasError={!!response?.errors?.name}
-            errorMessages={response?.errors?.name}
-          />
-          <p className='text-xs -mt-2 mb-6'>* This name will be displayed instead of your X handle if you enable <b>"Show as anon"</b></p>
+          <div className='grid grid-cols-2 gap-4'>
+            { /* name */ }
+            <div>
+              <GenericTextInput
+                label="Public name"
+                iconSource={<FaUser/>}
+                value={!profileData.anon && profileData.settings?.x_username ? profileData.settings?.x_username : profileData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                plain={true}
+                disabled={!profileData.anon}
+                hasError={!!response?.errors?.name}
+                errorMessages={response?.errors?.name}
+              />
+              <p className='text-xs -mt-2 mb-6'>* This name will be displayed instead of your X handle if you enable <b>"Show as anon"</b></p>
+            </div>
+            { /* email */ }
+            <div>
+              <GenericTextInput
+                className='cursor-pointer'
+                label="Email"
+                iconSource={<FaEnvelope/>}
+                value={privyUser?.email?.address || 'Soon!'}
+                onChange={() => { /* noop: handled by Privy */ }}
+                plain={true}
+                readOnly
+                disabled={true}
+                onClick={handleEmailWithPrivy}
+                hasError={!!response?.errors?.email}
+                errorMessages={response?.errors?.email}
+              />
+            </div>
+          </div>
 
-          <GenericTextInput
-            className='cursor-pointer'
-            label="Email"
-            iconSource={<FaEnvelope/>}
-            value={privyUser?.email?.address || 'Soon!'}
-            onChange={() => { /* noop: handled by Privy */ }}
-            plain={true}
-            readOnly
-            disabled={true}
-            onClick={handleEmailWithPrivy}
-            hasError={!!response?.errors?.email}
-            errorMessages={response?.errors?.email}
-          />
+          <XAuthorizeButton user={userProfile} onAuth={handleInputChange}/>
 
-          <Button
-            onClick={handleSubmit}
-            disabled={loading}
-            label={loading ? 'Saving...' : 'Save Changes'}
-          />
-        </ContentBlock>
-
-        <ContentBlock title='Privacy settings'>
+          { /* anon */ }
           <GenericCheckboxInput
             label='Show as anon'
             checked={profileData.anon}
@@ -238,6 +235,7 @@ const PrivateProfile: React.FC = () => {
           <Button
             onClick={handleSubmit}
             disabled={loading}
+            blinker={pendingChanges}
             label={loading ? 'Saving...' : 'Save Changes'}
           />
         </ContentBlock>
