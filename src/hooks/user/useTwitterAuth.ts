@@ -20,7 +20,7 @@ interface UseTwitterAuthReturn {
   authState: TwitterAuthState;
   isLoading: boolean;
   handleLoginWithX: () => Promise<void>;
-  handleGetAgentXSecrets: (userId: number) => Promise<void>;
+  handleGetUserXSecrets: (userId: number) => Promise<void>;
   markAsProcessed: () => void;
 }
 
@@ -45,12 +45,12 @@ export const useTwitterAuth = (options: UseTwitterAuthOptions = {}): UseTwitterA
 
   // Check URL parameters when hook initializes
   useEffect(() => {
-    const checkTwitterAuth = () => {
+    const checkTwitterAuthFromUrlParams = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const authSuccess = urlParams.get('twitter_auth_success') === 'true';
       const authError = urlParams.get('twitter_auth_error') === 'true';
       const screenName = urlParams.get('twitter_screen_name');
-      const userId = urlParams.get('x_user_id');
+      const userId = urlParams.get('twitter_user_id');
       
       if (authSuccess || authError) {
         setAuthState({
@@ -63,25 +63,8 @@ export const useTwitterAuth = (options: UseTwitterAuthOptions = {}): UseTwitterA
       }
     };
     
-    checkTwitterAuth();
+    checkTwitterAuthFromUrlParams();
   }, []);
-
-  // Mark as processed to avoid duplicate processing
-  const markAsProcessed = () => {
-    setAuthState(prev => ({
-      ...prev,
-      isReturningFromTwitter: false
-    }));
-    
-    // Clear URL parameters
-    const url = new URL(window.location.href);
-    url.searchParams.delete('twitter_auth_success');
-    url.searchParams.delete('twitter_auth_error');
-    url.searchParams.delete('twitter_screen_name');
-    url.searchParams.delete('x_user_id');
-    
-    window.history.replaceState({}, document.title, url.toString());    
-  };
 
   // Handle Twitter authentication response
   useEffect(() => {
@@ -98,11 +81,28 @@ export const useTwitterAuth = (options: UseTwitterAuthOptions = {}): UseTwitterA
       if (onAuthSuccess) {
         onAuthSuccess(twitterUsername, twitterUserId);
       }
-      handleGetAgentXSecrets(twitterUserId);
+      handleGetUserXSecrets(twitterUserId);
       markAsProcessed();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authState, onAuthSuccess]);
+
+  // Mark as processed to avoid duplicate processing
+  const markAsProcessed = () => {
+    setAuthState(prev => ({
+      ...prev,
+      isReturningFromTwitter: false
+    }));
+    
+    // Clear URL parameters
+    const url = new URL(window.location.href);
+    url.searchParams.delete('twitter_auth_success');
+    url.searchParams.delete('twitter_auth_error');
+    url.searchParams.delete('twitter_screen_name');
+    url.searchParams.delete('twitter_user_id');
+    
+    window.history.replaceState({}, document.title, url.toString());    
+  };
 
   // Login with X/Twitter
   const handleLoginWithX = async () => {
@@ -148,7 +148,7 @@ export const useTwitterAuth = (options: UseTwitterAuthOptions = {}): UseTwitterA
   };
 
   // Get X/Twitter tokens
-  const handleGetAgentXSecrets = async (userId: number) => {
+  const handleGetUserXSecrets = async (userId: number) => {
     setIsLoading(true);
     
     try {
@@ -191,7 +191,7 @@ export const useTwitterAuth = (options: UseTwitterAuthOptions = {}): UseTwitterA
     authState,
     isLoading,
     handleLoginWithX,
-    handleGetAgentXSecrets,
+    handleGetUserXSecrets,
     markAsProcessed
   };
 };

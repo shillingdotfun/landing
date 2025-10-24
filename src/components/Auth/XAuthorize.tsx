@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Button from '../Common/Button';
 import { PathsToStringProps, setValueByPath, TypeFromPath, User, UserSettings, UserUpdatePayload } from '../../types/user.types';
@@ -17,9 +17,8 @@ const XAuthorizeButton: React.FC<PrivyLoginButtonProps> = ({
   onAuth
 }) => {
   const [formState, setFormState] = useState<UserSettings>({...user.settings,});
-  const { twitterAuthStatus, checkingTwitterAuth } = useClientAuthStatus(user);
-
-  const { handleLoginWithX, isLoading: twitterLoading } = useTwitterAuth({
+  const { twitterAuthStatus, checkingTwitterAuth, forceRecheck } = useClientAuthStatus(user);
+  const { handleLoginWithX, isLoading: twitterLognAttemptLoading } = useTwitterAuth({
     onAuthSuccess: (username, userId) => {
       if (userId && username) {
         setFormState(prev => {
@@ -43,10 +42,18 @@ const XAuthorizeButton: React.FC<PrivyLoginButtonProps> = ({
           },
         };
         onAuth('settings', next);
+        onAuth('name', next.x_username);
         return next;
       });
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      forceRecheck(user)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   // Twitter auth validation
   const handleFormChange = <P extends PathsToStringProps<UserSettings>>(
@@ -60,32 +67,26 @@ const XAuthorizeButton: React.FC<PrivyLoginButtonProps> = ({
   };
 
   return (
-    <div className='grid grid-cols-2 gap-4 mb-8'>
-      <GenericTextInput
-        disabled={true}
-        plain={true} 
-        label='X account handler (without @)'
-        name='x_handler'
-        onChange={(e) => handleFormChange('x_username', e.target.value)}
-        value={formState?.x_username ?? ''}
-        className={`${formState?.x_username ? 'bg-green-200 text-green-500' : '!bg-slate-200'}`}
-        containerClassName={'!mb-0'}
-      />
-      <div className='flex items-end'>
+    <div className='grid grid-cols-1'>
+      <div className='mb-2'>
+        <p className='text-sm'>Authorized X account</p>
+        <p className='text-xs'>Your X handler is used for verification purposes</p>
+      </div>
+      <div className='grid grid-cols-2 gap-4 mb-8 items-end'>
+        <GenericTextInput
+          disabled={true}
+          plain={true} 
+          name='x_handler'
+          onChange={(e) => handleFormChange('x_username', e.target.value)}
+          value={formState?.x_username ?? ''}
+          className={`${formState?.x_username && twitterAuthStatus ? 'bg-green-300 text-green-600' : ''}`}
+          containerClassName={'!mb-0'}
+        />
         <Button
-          label={
-            twitterAuthStatus
-              ? 'Authorize another account'
-              : user.settings?.x_username &&
-                user.settings?.secrets.x_access_token &&
-                user.settings?.secrets.x_access_token_secret
-              ? 'Refresh authorization'
-              : 'Authorize'
-          }
+          label={twitterAuthStatus ? 'Verified' : 'Verify'}
           icon={<FaXTwitter />}
           onClick={handleLoginWithX}
-          disabled={twitterLoading || checkingTwitterAuth}
-          className='px-2'
+          disabled={twitterLognAttemptLoading || checkingTwitterAuth || twitterAuthStatus}
         />
       </div>
     </div>

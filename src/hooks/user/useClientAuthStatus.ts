@@ -12,8 +12,8 @@ export async function isTwitterAuthorized(user: User): Promise<boolean> {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      x_access_token: x_access_token,
-      x_access_token_secret: x_access_token_secret,
+      TWITTER_ACCESS_TOKEN: x_access_token,
+      TWITTER_ACCESS_TOKEN_SECRET: x_access_token_secret,
     }),
   });
 
@@ -26,15 +26,14 @@ export async function isTwitterAuthorized(user: User): Promise<boolean> {
   }
 }
 
-const useClientAuthStatus = (user: User) => {
-  const [twitterAuthStatus, setTwitterAuthStatus] = useState<boolean | null>(null);
+const useTwitterAuthStatus = (user: User) => {
+  const [twitterAuthStatus, setTwitterAuthStatus] = useState<boolean>(false);
   const [checkingTwitterAuth, setCheckingTwitterAuth] = useState(false);
   
   const isCheckingRef = useRef(false);
   const lastCheckDataRef = useRef<string>('');
 
-  const checkTwitterAuthWithData = useCallback(async (user?: User) => {
-    
+  const checkTwitterAuthWithData = useCallback(async (user?: User) => {    
     const dataHash = JSON.stringify({
       username: user?.settings?.x_username,
       userId: user?.settings?.x_user_id,
@@ -76,11 +75,7 @@ const useClientAuthStatus = (user: User) => {
       setCheckingTwitterAuth(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const checkTwitterAuthFromDefinitionData = useCallback(async (user: User) => {
-    return await checkTwitterAuthWithData(user);
-  }, [checkTwitterAuthWithData]);
+  }, [user]);
 
   const forceRecheck = useCallback(async (user: User) => {
     lastCheckDataRef.current = ''; // Clean cache
@@ -95,9 +90,8 @@ const useClientAuthStatus = (user: User) => {
   return { 
     twitterAuthStatus, 
     checkingTwitterAuth, 
-    checkTwitterAuthFromDefinitionData,
     forceRecheck
   };
 };
 
-export default useClientAuthStatus;
+export default useTwitterAuthStatus;

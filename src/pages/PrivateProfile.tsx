@@ -190,6 +190,10 @@ const PrivateProfile: React.FC = () => {
           title='Profile Settings'
         >
           <div className='grid grid-cols-2 gap-4'>
+            <XAuthorizeButton user={userProfile} onAuth={handleInputChange}/>
+          </div>
+
+          <div className='grid grid-cols-2 gap-4'>
             { /* name */ }
             <div>
               <GenericTextInput
@@ -202,7 +206,7 @@ const PrivateProfile: React.FC = () => {
                 hasError={!!response?.errors?.name}
                 errorMessages={response?.errors?.name}
               />
-              <p className='text-xs -mt-2 mb-6'>* This name will be displayed instead of your X handle if you enable <b>"Show as anon"</b></p>
+              <p className='text-xs -mt-2 mb-6'>* This name will be displayed instead of your X handle if you enable <b>"Don't show my identity anywhere"</b></p>
             </div>
             { /* email */ }
             <div>
@@ -210,7 +214,7 @@ const PrivateProfile: React.FC = () => {
                 className='cursor-pointer'
                 label="Email"
                 iconSource={<FaEnvelope/>}
-                value={privyUser?.email?.address || 'Soon!'}
+                value={privyUser?.email?.address || 'email@youremail.com'}
                 onChange={() => { /* noop: handled by Privy */ }}
                 plain={true}
                 readOnly
@@ -218,19 +222,22 @@ const PrivateProfile: React.FC = () => {
                 onClick={handleEmailWithPrivy}
                 hasError={!!response?.errors?.email}
                 errorMessages={response?.errors?.email}
+                customLabel={
+                  <label className='flex flex-row gap-1 text-sm mb-1'>
+                    <span>Email</span>
+                    <span className='rounded-full text-xs font-bold bg-yellow-500 text-black px-3 py-[2px]'>Soon!</span>
+                  </label>
+                }
               />
             </div>
           </div>
 
-          <XAuthorizeButton user={userProfile} onAuth={handleInputChange}/>
-
           { /* anon */ }
           <GenericCheckboxInput
-            label='Show as anon'
+            label="Don't show my identity anywhere"
             checked={profileData.anon}
             onChange={(e) => handleInputChange('anon', e.target.checked)}
           />
-          <p className='text-xs -mt-2 mb-6'>Don't show my identity anywhere</p>
 
           <Button
             onClick={handleSubmit}
