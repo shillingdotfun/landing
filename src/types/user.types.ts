@@ -1,3 +1,5 @@
+import { Campaign } from "./campaign.types";
+
 export interface User {
   id: string;
   name: string;
@@ -9,6 +11,8 @@ export interface User {
   updated_at: string;
   anon: boolean;
   settings: UserSettings;
+  createdCampaigns: Campaign[];
+  joinedCampaigns: Campaign[];
 }
 
 export type UserUpdatePayload = Partial<Pick<User, 

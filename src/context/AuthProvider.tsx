@@ -5,7 +5,7 @@ import { useLogout } from "@privy-io/react-auth";
 
 import { User } from "../types/user.types";
 
-import { getUserProfile } from "../services/user.service";
+import { getMe } from "../services/auth.service";
 import { WalletService } from "../services/wallet.service";
 import { AuthContext } from "./AuthContext";
 
@@ -35,7 +35,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     setLoading(true);
     try {
-      const res = await getUserProfile(); // should fail with 401 if the token is not valid
+      const res = await getMe(); // should fail with 401 if the token is not valid
       setUserProfile(res.data ?? null);
       setSessionStatus('valid');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     setError(null);
     try {
-      const res = await getUserProfile();
+      const res = await getMe();
       if (res.data) {
         setUserProfile(res.data);
       } else {

@@ -1,4 +1,5 @@
 // src/services/authService.ts
+import { User } from '../types/user.types';
 import api from './api';
 import { WalletService } from './wallet.service';
 
@@ -7,6 +8,16 @@ interface AuthData {
   wallet_address?: string | null;
   name?: string;
 }
+
+export interface UserMeResponse {
+    success: boolean,
+    message: string,
+    data?: User,
+}
+
+export const getMe = async (): Promise<UserMeResponse> => {
+  return await api.get('/me');
+};
 
 /**
  * Enhanced wallet login with email linking support in our backend

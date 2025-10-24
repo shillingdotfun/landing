@@ -22,6 +22,8 @@ import ContentBlock from '../components/Common/layouts/ContentBlock';
 import Loader from '../components/Common/Loader';
 import GenericCheckboxInput from '../components/Common/inputs/GenericCheckboxInput';
 import XAuthorizeButton from '../components/Auth/XAuthorize';
+import { CampaignCard } from '../components/Campaign/CampaignCard';
+import { Campaign } from '../types/campaign.types';
 
 const PrivateProfile: React.FC = () => {
   // Privy hooks 
@@ -184,130 +186,156 @@ const PrivateProfile: React.FC = () => {
   }
 
   return (
-    <div className='sm:grid sm:grid-cols-2 flex flex-col gap-4'>
-      <div className='flex flex-col gap-4'>
-        <ContentBlock
-          title='Profile Settings'
-        >
-          <div className='grid grid-cols-2 gap-4'>
-            <XAuthorizeButton user={userProfile} onAuth={handleInputChange}/>
-          </div>
-
-          <div className='grid grid-cols-2 gap-4'>
-            { /* name */ }
-            <div>
-              <GenericTextInput
-                label="Public name"
-                iconSource={<FaUser/>}
-                value={!profileData.anon && profileData.settings?.x_username ? profileData.settings?.x_username : profileData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                plain={true}
-                disabled={!profileData.anon}
-                hasError={!!response?.errors?.name}
-                errorMessages={response?.errors?.name}
-              />
-              <p className='text-xs -mt-2 mb-6'>* This name will be displayed instead of your X handle if you enable <b>"Don't show my identity anywhere"</b></p>
+    <div className='flex flex-col gap-4'>
+      <div className='sm:grid sm:grid-cols-2 flex flex-col gap-4'>
+        <div className='flex flex-col gap-4'>
+          <ContentBlock
+            title='Profile Settings'
+          >
+            <div className='grid grid-cols-2 gap-4'>
+              <XAuthorizeButton user={userProfile} onAuth={handleInputChange}/>
             </div>
-            { /* email */ }
-            <div>
-              <GenericTextInput
-                className='cursor-pointer'
-                label="Email"
-                iconSource={<FaEnvelope/>}
-                value={privyUser?.email?.address || 'email@youremail.com'}
-                onChange={() => { /* noop: handled by Privy */ }}
-                plain={true}
-                readOnly
-                disabled={true}
-                onClick={handleEmailWithPrivy}
-                hasError={!!response?.errors?.email}
-                errorMessages={response?.errors?.email}
-                customLabel={
-                  <label className='flex flex-row gap-1 text-sm mb-1'>
-                    <span>Email</span>
-                    <span className='rounded-full text-xs font-bold bg-yellow-500 text-black px-3 py-[2px]'>Soon!</span>
-                  </label>
-                }
-              />
+
+            <div className='grid grid-cols-2 gap-4'>
+              { /* name */ }
+              <div>
+                <GenericTextInput
+                  label="Public name"
+                  iconSource={<FaUser/>}
+                  value={!profileData.anon && profileData.settings?.x_username ? profileData.settings?.x_username : profileData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  plain={true}
+                  disabled={!profileData.anon}
+                  hasError={!!response?.errors?.name}
+                  errorMessages={response?.errors?.name}
+                />
+                <p className='text-xs -mt-2 mb-6'>* This name will be displayed instead of your X handle if you enable <b>"Don't show my identity anywhere"</b></p>
+              </div>
+              { /* email */ }
+              <div>
+                <GenericTextInput
+                  className='cursor-pointer'
+                  label="Email"
+                  iconSource={<FaEnvelope/>}
+                  value={privyUser?.email?.address || 'email@youremail.com'}
+                  onChange={() => { /* noop: handled by Privy */ }}
+                  plain={true}
+                  readOnly
+                  disabled={true}
+                  onClick={handleEmailWithPrivy}
+                  hasError={!!response?.errors?.email}
+                  errorMessages={response?.errors?.email}
+                  customLabel={
+                    <label className='flex flex-row gap-1 text-sm mb-1'>
+                      <span>Email</span>
+                      <span className='rounded-full text-xs font-bold bg-yellow-500 text-black px-3 py-[2px]'>Soon!</span>
+                    </label>
+                  }
+                />
+              </div>
             </div>
+
+            { /* anon */ }
+            <GenericCheckboxInput
+              label="Don't show my identity anywhere"
+              checked={profileData.anon}
+              onChange={(e) => handleInputChange('anon', e.target.checked)}
+            />
+
+            <Button
+              onClick={handleSubmit}
+              disabled={loading}
+              blinker={pendingChanges}
+              label={loading ? 'Saving...' : 'Save Changes'}
+            />
+          </ContentBlock>
+        </div>
+
+        <div className='flex flex-col gap-4'>
+          <ContentBlock
+            title='Wallet Settings'
+          >
+            <div className='flex flex-col justify-between h-full'>
+              <div>
+                {userProfile?.walletAddress && (
+                  <div className='flex flex-row items-center gap-2 rounded-md bg-input-light mb-6'>
+                    {hasWallet && (() => {
+                      const w = wallets.find((w) => w.address === userProfile.walletAddress);
+                      if (!w) return null;
+                      // En Solana el identificador del proveedor es `provider`:
+                      const key = (w.standardWallet.name || '').toLowerCase(); // p.ej. 'phantom'
+                      const iconSrc = w.standardWallet.icon;
+                      return iconSrc ? <img src={iconSrc} alt={key} className="h-5 w-5 rounded" /> : null;
+                    })()}
+                    <span className='font-afacad text-md'>
+                      {userProfile.walletAddress}
+                    </span>
+                  </div>
+                )}
+
+                <Button
+                  label={connectWalletButtonLabel}
+                  onClick={handleWalletWithPrivy}
+                  className=''
+                  blinker={!userProfile?.walletAddress || !hasWallet}
+                  disabled={loading}
+                />
+              </div>
+            </div>
+          </ContentBlock>
+          <ContentBlock 
+            title='Karma points and balance'
+            className='flex-1 bg-gradient-to-r from-purple-500 to-blue-500 sm:from-purple-500/50 sm:to-blue-500/50'
+          >
+            <div className='grid grid-cols-2 gap-4 mb-6'>
+              <div className="bg-yellow-400 text-black flex flex-row rounded-lg">
+                <div className="ml-[18px] flex h-[70px] w-auto flex-row items-center">
+                  <div className="rounded-full sm:p-3">
+                    <FaBoltLightning className="text-[24px]"/>
+                  </div>
+                </div>
+                <div className="h-50 ml-4 flex w-auto flex-col justify-center">
+                  <p className="font-dm text-sm font-medium font-anek-latin">Karma points</p>
+                  <h4 className="text-xl font-bold font-anek-latin">0</h4>
+                </div>
+              </div>
+
+              <div className="bg-slate-100/30 flex flex-row rounded-lg text-white">
+                <div className="ml-[18px] flex h-[70px] w-auto flex-row items-center">
+                  <div className="rounded-full sm:p-3">
+                    <img src={solanaLogoWhite} className="h-[24px]" alt="SOL logo"/>
+                  </div>
+                </div>
+                <div className="h-50 ml-4 flex w-auto flex-col justify-center">
+                  <p className="font-dm text-sm font-medium font-anek-latin">{import.meta.env.VITE_TOKEN_MINT_TOKEN_SYMBOL} balance</p>
+                  <h4 className="text-xl font-bold font-anek-latin">{tokenBalance ? Number.parseFloat(tokenBalance.toString()).toFixed(4) : '--'}</h4>
+                </div>
+              </div>
+            </div>
+          </ContentBlock>
+        </div>
+      </div>
+      <div className='sm:grid sm:grid-cols-1 flex flex-col gap-4'>
+        <ContentBlock title='My created campaigns'>
+          <div className="grid grid-cols-3 gap-5">
+            {userProfile.createdCampaigns.map((campaign: Campaign) => (
+              <CampaignCard 
+                key={campaign.id} 
+                campaign={campaign}
+              />
+            ))}
           </div>
-
-          { /* anon */ }
-          <GenericCheckboxInput
-            label="Don't show my identity anywhere"
-            checked={profileData.anon}
-            onChange={(e) => handleInputChange('anon', e.target.checked)}
-          />
-
-          <Button
-            onClick={handleSubmit}
-            disabled={loading}
-            blinker={pendingChanges}
-            label={loading ? 'Saving...' : 'Save Changes'}
-          />
         </ContentBlock>
       </div>
-
-      <div className='flex flex-col gap-4'>
-        <ContentBlock
-          title='Wallet Settings'
-        >
-          <div className='flex flex-col justify-between h-full'>
-            <div>
-              {userProfile?.walletAddress && (
-                <div className='flex flex-row items-center gap-2 rounded-md bg-input-light mb-6'>
-                  {hasWallet && (() => {
-                    const w = wallets.find((w) => w.address === userProfile.walletAddress);
-                    if (!w) return null;
-                    // En Solana el identificador del proveedor es `provider`:
-                    const key = (w.standardWallet.name || '').toLowerCase(); // p.ej. 'phantom'
-                    const iconSrc = w.standardWallet.icon;
-                    return iconSrc ? <img src={iconSrc} alt={key} className="h-5 w-5 rounded" /> : null;
-                  })()}
-                  <span className='font-afacad text-md'>
-                    {userProfile.walletAddress}
-                  </span>
-                </div>
-              )}
-
-              <Button
-                label={connectWalletButtonLabel}
-                onClick={handleWalletWithPrivy}
-                className=''
-                blinker={!userProfile?.walletAddress || !hasWallet}
-                disabled={loading}
+      <div className='sm:grid sm:grid-cols-1 flex flex-col gap-4'>
+        <ContentBlock title='My participated campaigns'>
+          <div className="grid grid-cols-3 gap-5">
+            {userProfile.joinedCampaigns.map((campaign: Campaign) => (
+              <CampaignCard 
+                key={campaign.id} 
+                campaign={campaign}
               />
-            </div>
-          </div>
-        </ContentBlock>
-        <ContentBlock 
-          title='Karma points and balance'
-          className='h-fit bg-gradient-to-r from-purple-500 to-blue-500 sm:from-purple-500/50 sm:to-blue-500/50'
-        >
-          <div className='grid grid-cols-2 gap-4 mb-6'>
-            <div className="bg-yellow-400 text-black flex flex-row rounded-lg">
-              <div className="ml-[18px] flex h-[70px] w-auto flex-row items-center">
-                <div className="rounded-full sm:p-3">
-                  <FaBoltLightning className="text-[24px]"/>
-                </div>
-              </div>
-              <div className="h-50 ml-4 flex w-auto flex-col justify-center">
-                <p className="font-dm text-sm font-medium font-anek-latin">Karma points</p>
-                <h4 className="text-xl font-bold font-anek-latin">0</h4>
-              </div>
-            </div>
-
-            <div className="bg-slate-100/30 flex flex-row rounded-lg text-white">
-              <div className="ml-[18px] flex h-[70px] w-auto flex-row items-center">
-                <div className="rounded-full sm:p-3">
-                  <img src={solanaLogoWhite} className="h-[24px]" alt="SOL logo"/>
-                </div>
-              </div>
-              <div className="h-50 ml-4 flex w-auto flex-col justify-center">
-                <p className="font-dm text-sm font-medium font-anek-latin">{import.meta.env.VITE_TOKEN_MINT_TOKEN_SYMBOL} balance</p>
-                <h4 className="text-xl font-bold font-anek-latin">{tokenBalance ? Number.parseFloat(tokenBalance.toString()).toFixed(4) : '--'}</h4>
-              </div>
-            </div>
+            ))}
           </div>
         </ContentBlock>
       </div>
