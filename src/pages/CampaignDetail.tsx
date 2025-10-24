@@ -17,11 +17,15 @@ import Button from '../components/Common/Button';
 import PublicLayout from '../components/Common/layouts/PublicLayout';
 import ContentBlock from '../components/Common/layouts/ContentBlock';
 import { Participant } from '../types/campaign.types';
-
-
+import Modal from '../components/Common/Modal';
+import { useModal } from '../hooks/useModal';
+import solanaLogoWhite from '../assets/images/solana-white.svg'
+import { SolanaPaymentWall } from '../components/Campaign/SolanaPaymentWall';
 
 export const CampaignDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const fundCampaignModal = useModal();
+  const paymentWallModal = useModal();
   const navigate = useNavigate();
 
   const { addNotification } = useToasts();
@@ -342,6 +346,77 @@ export const CampaignDetail: React.FC = () => {
             </div>
           </div>
         </div>
+
+              {/* Fund campaign modal */}
+      <Modal
+        ref={fundCampaignModal.modalRef}
+        title="Time to load the bag!"
+        animation='slide'
+        animationDuration={300}
+        maxWidth={'lg'}
+        closeOnOverlayClick={false}
+        bgColor='bg-slate-200'
+        bgHeaderColor='slate-200'
+      >
+        {campaign.budget &&
+          <div className='flex flex-col gap-4'>
+            <p>This is the SOL your shillers will work for:</p>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='p-4 bg-purple-100 rounded-md'>
+                <p className='text-[#3e2b56]'>Campaign budget pool</p>
+                <div className='flex flex-row gap-2 items-center font-thin'>
+                  <span>{formatCurrency(campaign.budget, 'SOL')}</span>
+                </div>
+              </div>
+              <div className='p-4 bg-purple-100 rounded-md'>
+                <p className='text-[#3e2b56]'>Platform fee</p>
+                <div className='flex flex-row gap-2 items-center font-thin'>
+                  <span>{formatCurrency(campaign.budget * 0.1, 'SOL')}</span>
+                </div>
+              </div>
+            </div>
+            <div className='grid grid-cols-2 p-4 gap-4 bg-slate-300 rounded-md items-center'>
+              <div>
+                <p className='text-[#3e2b56]'>Total amount to pay</p>
+                <div className='flex flex-row gap-2 items-center font-thin'>
+                  <span>{formatCurrency(campaign.budget + (campaign.budget * 0.1), 'SOL')}</span>
+                </div>
+              </div>
+              <div>
+                <Button
+                  icon={<img className='h-4 w-4' src={solanaLogoWhite} />}
+                  label='Fund campaign'
+                  onClick={() => {
+                    fundCampaignModal.close();
+                    paymentWallModal.open();
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        }
+      </Modal>
+      
+      {/* Checkout modal */}
+      <Modal 
+        title={'Funding > Payment'} 
+        ref={paymentWallModal.modalRef}
+        animation='slide'
+        animationDuration={300}
+        maxWidth={'xl'}
+        closeOnOverlayClick={false}
+        bgColor='bg-slate-200'
+        bgHeaderColor='slate-200'
+      >
+        <SolanaPaymentWall
+          amount={(campaign.budget! + (campaign.budget! * 0.1)).toFixed(6)}
+          symbol={'SOL'}
+          description={`Campaign pool funding`}
+          orderId={`pool_funding-${userProfile?.id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
+          onSuccess={() => alert('bien')}
+          onError={() => alert('error')}
+        />
+      </Modal>
       </div>
     </PublicLayout>
   );

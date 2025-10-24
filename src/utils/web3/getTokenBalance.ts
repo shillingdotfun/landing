@@ -15,13 +15,16 @@ interface TokenBalanceResult {
   tokenProgram?: 'spl-token' | 'spl-token-2022';
 }
 
+/** Native SOL if no mint or "native" */
+export const isNativeSOL = (maybeMint?: string) => !maybeMint || maybeMint === 'native';
+
 /**
- * Detects which token program a mint uses
+ * Detect which token program (Token v3 or Token-2022) a mint uses
  * @param connection Solana connection
  * @param mintAddress The mint address to check
  * @returns The program ID that owns this mint
  */
-const detectTokenProgram = async (
+export const detectTokenProgram = async (
   connection: Connection,
   mintAddress: PublicKey
 ): Promise<PublicKey> => {
@@ -66,7 +69,7 @@ export const getTokenBalance = async (
     const walletPublicKey = new PublicKey(walletAddress);
 
     // Handle native SOL
-    if (tokenMintAddress.toLowerCase() === 'native') {
+    if (isNativeSOL(tokenMintAddress)) {
       const balanceInLamports = await connection.getBalance(walletPublicKey);
       const uiBalance = balanceInLamports / LAMPORTS_PER_SOL;
       
