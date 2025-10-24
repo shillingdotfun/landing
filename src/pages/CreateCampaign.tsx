@@ -8,8 +8,8 @@ import solanaLogo from '../assets/images/solana-logo.svg'
 
 import { CreateCampaignDTO } from '../types/campaign.types';
 
-import { useCreateCampaign } from '../hooks/campaign/useCreateCampaign';
 import { useToasts } from '../hooks/useToast';
+import { useCreateCampaign } from '../hooks/campaign/useCreateCampaign';
 
 import Button from '../components/Common/Button';
 import GenericTextInput from '../components/Common/inputs/GenericTextInput';
@@ -51,11 +51,19 @@ export const CreateCampaign: React.FC = () => {
     const newkeywords = [...formData.keywords];
     newkeywords[index] = value;
     setFormData(prev => ({ ...prev, keywords: newkeywords }));
+    // Clear error when user starts typing
+    if (errors['keywords']) {
+      setErrors(prev => ({ ...prev, ['keywords']: [''] }));
+    }
   };
 
   const addKeyword = () => {
     if (formData.keywords.length < 5) {
       setFormData(prev => ({ ...prev, keywords: [...prev.keywords, ''] }));
+      // Clear error when user starts typing
+      if (errors['keywords']) {
+        setErrors(prev => ({ ...prev, ['keywords']: [''] }));
+      }
     }
   };
 
@@ -89,8 +97,15 @@ export const CreateCampaign: React.FC = () => {
 
     if (response.errors) {
       setErrors(response.errors)
-      console.log(response.errors);
+      return;
     }
+
+    if (!response.data) {
+      addNotification('Empty response, please contact with support', 'error');
+      return;
+    }
+
+    navigate(`/campaigns/${response.data.id}`)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response])
 
@@ -209,7 +224,7 @@ export const CreateCampaign: React.FC = () => {
                     />
                 )}
                 {errors.keywords && (
-                    <p className="mt-2 text-[7px] text-red-400" >
+                    <p className="mt-2 text-sm text-red-400" >
                       {errors.keywords}
                     </p>
                 )}
