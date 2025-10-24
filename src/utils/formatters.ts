@@ -2,20 +2,20 @@
 
 export const formatCurrency = (amount: number, currency?: string): string => {
   if (amount >= 1000000) {
-    return `${(amount / 1000000).toFixed(1)}M ${currency}`;
+    return `${(amount / 1000000).toFixed(2)}M ${currency}`;
   }
   if (amount >= 1000) {
-    return `${(amount / 1000).toFixed(1)}K ${currency}`;
+    return `${(amount / 1000).toFixed(2)}K ${currency}`;
   }
-  return `${amount.toFixed(0)} ${currency}`;
+  return `${amount.toFixed(2)} ${currency}`;
 };
 
 export const formatNumber = (num: number): string => {
   if (num >= 1000000) {
-    return `${(num / 1000000).toFixed(1)}M`;
+    return `${(num / 1000000).toFixed(2)}M`;
   }
   if (num >= 1000) {
-    return `${(num / 1000).toFixed(1)}K`;
+    return `${(num / 1000).toFixed(2)}K`;
   }
   return num.toString();
 };
