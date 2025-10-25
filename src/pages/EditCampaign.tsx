@@ -159,7 +159,7 @@ export const EditCampaign: React.FC = () => {
       <div className="min-h-screen">
         <div className="max-w-[1200px] mx-auto p-10">
           <ErrorMessage message={error || 'Campaign not found'} />
-          <Button onClick={() => navigate('/')} label="← BACK" className="mb-6" />
+          <Button onClick={() => navigate(-1)} label="← BACK" className="mb-6" />
         </div>
       </div>
     );
@@ -170,7 +170,7 @@ export const EditCampaign: React.FC = () => {
   return (
     <div className="min-h-screen">
       <div className="max-w-[1400px] mx-auto p-10">
-        <Button onClick={() => navigate('/')} label="← BACK" className="mb-6" />
+        <Button onClick={() => navigate(-1)} label="← BACK" className="mb-6" />
 
         <header className="mb-8">
           <h1 className="text-4xl font-afacad font-bold uppercase mb-3">

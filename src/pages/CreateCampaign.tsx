@@ -29,7 +29,7 @@ export const CreateCampaign: React.FC = () => {
     tokenSymbol: '',
     tokenContractAddress: '',
     campaignType: 'community', //TODO: Remove this preset when the other types will be ready
-    budget: undefined,
+    budget: 0,
     maxParticipants: undefined,
     keywords: [''],
     mentionAccount: '',
@@ -114,7 +114,7 @@ export const CreateCampaign: React.FC = () => {
       <div className="max-w-[1400px] mx-auto p-10">
         {/* Back Button */}
         <Button
-          onClick={() => navigate('/')}
+          onClick={() => navigate(-1)}
           label="← BACK"
           className='mb-6'
         />

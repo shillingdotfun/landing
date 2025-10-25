@@ -29,7 +29,7 @@ export const Home: React.FC = () => {
                 <h2 className="text-3xl font-bold font-afacad">
                   Trending campaigns
                 </h2>
-                <Button onClick={() => navigate('/campaigns')} label='Vew all'/>
+                <Button disabled={true} onClick={() => navigate('/campaigns')} label='Vew all'/>
               </div>
               <CampaignGrid limit={6} />
             </section>
@@ -40,7 +40,7 @@ export const Home: React.FC = () => {
                 <h2 className="text-3xl font-bold font-afacad">
                   Top KOLs
                 </h2>
-                <Button onClick={() => navigate('/leaderboard')} label='Full leaderboard'/>
+                <Button disabled={true} onClick={() => navigate('/leaderboard')} label='Full leaderboard'/>
               </div>
               <KOLRankingTable limit={8} />
             </section>
