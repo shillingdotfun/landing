@@ -1,6 +1,6 @@
 // src/mocks/data/campaigns.data.ts
 
-import { Campaign } from '../../types/campaign.types';
+import { Campaign, UpdateCampaignDTO } from '../../types/campaign.types';
 import { CampaignFactory } from '../factories/campaign.factory';
 
 
@@ -18,7 +18,7 @@ export const addCampaign = (campaign: Campaign) => {
   return campaign;
 };
 
-export const updateCampaign = (id: string, updates: Partial<Campaign>) => {
+export const updateCampaign = (id: string, updates: Partial<UpdateCampaignDTO>) => {
   mockCampaigns = mockCampaigns.map(c => 
     c.id === id ? { ...c, ...updates, updatedAt: new Date().toISOString() } : c
   );

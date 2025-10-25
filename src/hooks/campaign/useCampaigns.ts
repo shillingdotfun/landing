@@ -37,7 +37,7 @@ export const useCampaigns = () => {
     }
   };
 
-    const fetchPublicCampaigns = async () => {
+  const fetchPublicCampaigns = async () => {
     try {
       setLoading(true);
       setError(null);

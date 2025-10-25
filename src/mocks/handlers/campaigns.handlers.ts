@@ -144,7 +144,7 @@ export const campaignsHandlers = [
     }
     
     const updatedCampaign = updateCampaign(id as string, {
-      participantsCount: campaign.participantsCount + 1,
+      budget: campaign.budget,
     });
     
     return HttpResponse.json({

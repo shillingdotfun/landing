@@ -28,3 +28,18 @@ export const getRandomGradient = (): string => {
 };
 
 export const USER_WALLET_ADDR_STORAGE_KEY = 'user_wallet';
+
+export const CAMPAIGN_CONSTANTS = {
+  MAX_KEYWORDS: 5,
+  MIN_KEYWORDS: 1,
+  MAX_DESCRIPTION_LENGTH: 500,
+  DEFAULT_CAMPAIGN_DURATION_DAYS: 7,
+  PLATFORM_FEE_PERCENTAGE: 0.1,
+};
+
+export const CAMPAIGN_TIPS = [
+  'Higher budgets attract more participants',
+  'Use unique keywords for better tracking',
+  '7-14 days is optimal duration',
+  'Clear token symbols work best',
+];

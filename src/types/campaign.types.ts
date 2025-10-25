@@ -37,8 +37,8 @@ export interface Campaign {
   campaignName: string;
   campaignCreatorUser: User;
   campaignDescription?: string;
-  tokenContractAddress: string;
-  tokenSymbol?: string;
+  tokenContractAddress?: string;
+  tokenSymbol: string;
   type: CampaignType;
   status: CampaignStatus;
   
@@ -77,10 +77,26 @@ export interface Campaign {
 export interface CreateCampaignDTO {
   campaignName: string;
   campaignDescription?: string;
-  tokenContractAddress: string;
-  tokenSymbol?: string;
+  tokenContractAddress?: string;
+  tokenSymbol: string;
   campaignType: string;
-  budget?: number;
+  budget: number;
+  keywords: string[];
+  mentionAccount?: string;
+  minKarma?: number;
+  maxParticipants?: number;
+  startsAt: string;
+  endsAt: string;
+}
+
+export interface UpdateCampaignDTO {
+  id: string;
+  campaignName: string;
+  campaignDescription?: string;
+  tokenContractAddress?: string;
+  tokenSymbol: string;
+  campaignType: string;
+  budget: number;
   keywords: string[];
   mentionAccount?: string;
   minKarma?: number;

@@ -1,7 +1,7 @@
 // src/services/campaigns.service.ts
 
 import { PaginatedResponse, ApiResponse } from '../types/api.types';
-import { Campaign, CreateCampaignDTO } from '../types/campaign.types';
+import { Campaign, CreateCampaignDTO, UpdateCampaignDTO } from '../types/campaign.types';
 import api from './api';
 
 
@@ -34,6 +34,10 @@ export const campaignsService = {
 
   async create(data: CreateCampaignDTO): Promise<ApiResponse<Campaign>> {
     return await api.post('/campaigns', data);
+  },
+
+  async update(id: string, data: UpdateCampaignDTO): Promise<ApiResponse<Campaign>> {
+    return await api.put(`/campaigns/${id}/update`, data);
   },
 
   async join(campaignId: string): Promise<ApiResponse<any>> {

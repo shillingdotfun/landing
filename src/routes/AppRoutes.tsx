@@ -7,6 +7,7 @@ import Home from '../pages/Home';
 import CampaignDetail from '../pages/CampaignDetail';
 import CreateCampaign from '../pages/CreateCampaign';
 import PrivateProfile from '../pages/PrivateProfile';
+import EditCampaign from '../pages/EditCampaign';
 
 
 const AppRoutes: React.FC = () => {
@@ -23,11 +24,17 @@ const AppRoutes: React.FC = () => {
           </PrivateRoute>
         }
       />
-      <Route path="/create" element={
+      <Route path="/campaigns/create" element={
         <PrivateRoute pageTitle='Create campaign'>
           <CreateCampaign />
         </PrivateRoute>
       } />
+      <Route path="/campaigns/:id/edit" element={
+          <PrivateRoute pageTitle='Edit campaign'>
+            <EditCampaign />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 };
