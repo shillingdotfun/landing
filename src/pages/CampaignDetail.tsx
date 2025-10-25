@@ -118,28 +118,36 @@ export const CampaignDetail: React.FC = () => {
     <PublicLayout>
       <div className="min-h-screen  text-white">
         <div className="max-w-[1400px] mx-auto p-10">
-          {/* Back Button */}
-          <Button
-            onClick={() => navigate('/')}
-            label="← Back"
-            className='mb-6'
-          />
+          <div className='flex flex-row gap-2 justify-between mb-6'>
+            {/* Buttons */}
+            <Button
+              onClick={() => navigate('/')}
+              label="← Back"
+            />
+            <div className='flex flex-row gap-2'>
+              {isOwned && fundingInfo.hasPendingFunding &&
+                <Button
+                  onClick={() => navigate(`/campaigns/${campaign.id}/edit`) }
+                  disabled={isJoining || campaign.status === CampaignStatus.ACTIVE}
+                  label={'Edit'}
+                />
+              }
+              <Button
+                onClick={handleJoin}
+                disabled={isJoining || isJoined}
+                label={isJoined ? 'Joined' : isJoining ? 'JOINING...' : isCommunity ? 'Join now' : 'Apply'}
+              />
+            </div>
+          </div>
           {/* Header and stats */}
-          <div className='grid grid-cols-2 gap-8'>
+          <div className='grid grid-cols-2 gap-8 mb-8'>
             {/* Campaign Header */}
-            <ContentBlock className="mb-8">
-              <div className="flex flex-row items-start gap-8 mb-8">
-                <div className="flex-1">
-                  {/* Creator */}
-                  <div className='flex flex-row gap-2 items-center'>
-                    <span>Creator:</span> 
-                    <span className='flex items-center gap-1'>
-                      {campaign.campaignCreatorUser.anon ? campaign.campaignCreatorUser.walletAddress : campaign.campaignCreatorUser.name}
-                      <RiVerifiedBadgeFill/>
-                    </span>
-                  </div>
+            <ContentBlock>
+              <div className="flex flex-col items-start gap-6">
+                {/* Summary */}
+                <div className="flex flex-col">
                   {/* Name, status & type */}
-                  <div className="flex items-center gap-2 mb-4">
+                  <div className="flex items-center gap-2">
                     <span className={`px-3 py-1 ${campaign.status === CampaignStatus.DRAFT ? 'bg-orange-400 text-white' : campaign.status === CampaignStatus.ACTIVE ? 'bg-green-400' : 'bg-red-400'} text-purple-400 text-xs rounded-full uppercase`}>
                       {campaign.status.toUpperCase()}
                     </span>
@@ -150,141 +158,144 @@ export const CampaignDetail: React.FC = () => {
                       {campaign.campaignName}
                     </h1>
                   </div>
+                  {/* Creator */}
+                  <div className='flex flex-row gap-1 items-center text-xs mb-8'>
+                    <span>Created by</span> 
+                    <span className='flex items-center gap-1'>
+                      {campaign.campaignCreatorUser.anon ? campaign.campaignCreatorUser.walletAddress : campaign.campaignCreatorUser.name}
+                      <RiVerifiedBadgeFill/>
+                    </span>
+                  </div>
                   {/* Description */}
                   <div className="flex flex-row mb-4">
                     <p className="">
                       {campaign.campaignDescription}
                     </p>
                   </div>
-                  {/* Creator & keywords */}
-                  <div className='grid gird-cols-2 mb-8 gap-4'>
-                    <div className="flex flex-row gap-2">
-                      <p>
-                        Tracked keywords:
-                      </p>
-                      <div className='flex flex-row items-left gap-1 text-xs'>
-                        {campaign.keywords.map((tag, i) => (
-                          <span className='px-3 py-1 rounded-full border' key={i}>{tag}</span>
-                        ))}
-                      </div>
+                  {/* keywords */}
+                  <div className="flex flex-row gap-2 mb-4">
+                    <p>
+                      Tracked keywords:
+                    </p>
+                    <div className='flex flex-row items-left gap-1 text-xs'>
+                      {campaign.keywords.map((tag, i) => (
+                        <span className='px-3 py-1 rounded-full border' key={i}>{tag}</span>
+                      ))}
                     </div>
                   </div>
                 </div>
-                <div className='flex flex-row gap-2'>
-                  {isOwned && 
-                    <Button
-                      onClick={() => navigate(`/campaigns/${campaign.id}/edit`) }
-                      disabled={isJoining || campaign.status === CampaignStatus.ACTIVE}
-                      label={'Edit'}
-                    />
-                  }
-                  <Button
-                    onClick={handleJoin}
-                    disabled={isJoining || isJoined}
-                    label={isJoined ? 'Joined' : isJoining ? 'JOINING...' : isCommunity ? 'Join now' : 'Apply'}
-                  />
-                </div>
-              </div>
-              {/* Campaign data */}
-              <div className="grid grid-cols-4 gap-6 w-full mb-4">
-                <div>
-                  <div className="text-xs  mb-2">
-                    {isCommunity ? 'POOL' : 'BUDGET'}
-                  </div>
-                  <div className="text-xl text-indigo-400">
-                    {fundingInfo.alreadyFunded.toFixed(2)}/
-                    {formatCurrency(campaign.budget /*campaign.funding.reduce((sum: number, funding: CampaignFunding) => sum + funding.amountPaid, 0)*/, 'SOL')}
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-xs uppercase mb-2">
-                    Participants
-                  </div>
-                  <div className="text-xl text-gray-200" >
-                    {campaign.participantsCount}{campaign.maxParticipants && campaign.maxParticipants > 0 ? `/${campaign.maxParticipants}` : '' }
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-xs uppercase mb-2">
-                    Ends in
-                  </div>
-                  <div className="text-xl text-amber-400" >
-                    {formatTimeRemaining(campaign.endsAt)}
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-xs uppercase mb-2">
-                    Distributed
-                  </div>
-                  <div className="text-xl text-emerald-400" >
-                    {progress}%
-                  </div>
-                </div>
-              </div>
-              <div>
+                {/* Add pending funds */}
                 {isOwned && fundingInfo.hasPendingFunding &&
-                  <Button
+                <div className='flex flex-col gap-4'>
+                  <div>
+                    <Button
                     onClick={() => fundCampaignModal.open()}
                     disabled={isJoining || campaign.status === CampaignStatus.ACTIVE}
-                    label={`Add pending ${fundingInfo.pendingFunds} SOL`}
+                    label={`Add pending ${fundingInfo.pendingFunds.toFixed(2)} SOL`}
+                    blinker={true}
                   />
+                  </div>
+                  <p className='text-sm text-red-500 font-semibold'>* Your campaign will be published when you have funded the whole budget</p>
+                </div>
                 }
               </div>
             </ContentBlock>
 
             {/* Stats Grid & Progress */}
-            <ContentBlock className="mb-8 flex flex-col justify-center gap-8">
-              <div className="grid grid-cols-3 gap-6 text-[#3e2b56] -mt-6">
-                <div className="rounded-lg bg-purple-100 p-6">
-                  <div className="text-xs uppercase mb-3">
-                    Total engagement
+            <ContentBlock>
+              <div className="flex flex-col justify-center gap-8">
+                <div className="grid grid-cols-3 gap-6 text-[#3e2b56]">
+                  <div className="rounded-lg bg-purple-100 p-6">
+                    <div className="text-xs uppercase mb-3">
+                      Total engagement
+                    </div>
+                    <div className="text-2xl text-indigo-400 mb-2" >
+                      {formatNumber(campaign.totalEngagement)}
+                    </div>
+                    <div className="text-xs">
+                      Likes, RTs, Replies
+                    </div>
                   </div>
-                  <div className="text-2xl text-indigo-400 mb-2" >
-                    {formatNumber(campaign.totalEngagement)}
-                  </div>
-                  <div className="text-xs">
-                    Likes, RTs, Replies
-                  </div>
-                </div>
 
-                <div className="rounded-lg bg-purple-100 p-6">
-                  <div className="text-xs uppercase mb-3">
-                    Total impressions
+                  <div className="rounded-lg bg-purple-100 p-6">
+                    <div className="text-xs uppercase mb-3">
+                      Total impressions
+                    </div>
+                    <div className="text-2xl text-purple-400 mb-2" >
+                      {formatNumber(campaign.totalImpressions)}
+                    </div>
+                    <div className="text-xs">
+                      Total Reach
+                    </div>
                   </div>
-                  <div className="text-2xl text-purple-400 mb-2" >
-                    {formatNumber(campaign.totalImpressions)}
-                  </div>
-                  <div className="text-xs">
-                    Total Reach
-                  </div>
-                </div>
 
-                <div className="rounded-lg bg-purple-100 p-6">
-                  <div className="text-xs uppercase mb-3">
-                    Total tweets
-                  </div>
-                  <div className="text-2xl text-emerald-400 mb-2" >
-                    {campaign.totalTweets}
-                  </div>
-                  <div className="text-xs">
-                    Posts Created
+                  <div className="rounded-lg bg-purple-100 p-6">
+                    <div className="text-xs uppercase mb-3">
+                      Total tweets
+                    </div>
+                    <div className="text-2xl text-emerald-400 mb-2" >
+                      {campaign.totalTweets}
+                    </div>
+                    <div className="text-xs">
+                      Posts Created
+                    </div>
                   </div>
                 </div>
-              </div>
-              {/* Progress Bar */}
-              <div className="flex flex-col">
-                <div className="h-6 border border-purple-100/30 relative overflow-hidden rounded-full">
-                  <div 
-                    className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-500"
-                    style={{ width: `${progress}%` }}
-                  />
+                {/* Progress Bar */}
+                <div className="flex flex-col">
+                  <div className="h-6 border border-purple-100/30 relative overflow-hidden rounded-full">
+                    <div 
+                      className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-500"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between mt-2 text-xs uppercase">
+                    <span>Distributed: {formatCurrency(campaign.distributedAmount, 'SOL')}</span>
+                    <span>Remaining: {formatCurrency(campaign.budget - campaign.distributedAmount, 'SOL')}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between mt-2 text-xs uppercase">
-                  <span>Distributed: {formatCurrency(campaign.distributedAmount, 'SOL')}</span>
-                  <span>Remaining: {formatCurrency(campaign.budget - campaign.distributedAmount, 'SOL')}</span>
+                {/* Campaign data */}
+                <div className="grid grid-cols-4 gap-6 w-full items-center mb-4">
+                  <div>
+                    <div className="text-xs  mb-2">
+                      {isCommunity ? 'POOL' : 'BUDGET'}
+                    </div>
+                    <div className="text-xl text-indigo-400">
+                      <span className={isOwned && fundingInfo.pendingFunds ? 'text-red-500 animate-pulse' : ''}>
+                        {fundingInfo.alreadyFunded.toFixed(2)}
+                      </span>/
+                      <span>
+                        {formatCurrency(campaign.budget, 'SOL')}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-xs uppercase mb-2">
+                      Participants
+                    </div>
+                    <div className="text-xl text-gray-200" >
+                      {campaign.participantsCount}{campaign.maxParticipants && campaign.maxParticipants > 0 ? `/${campaign.maxParticipants}` : '' }
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-xs uppercase mb-2">
+                      Ends in
+                    </div>
+                    <div className="text-xl text-amber-400" >
+                      {formatTimeRemaining(campaign.endsAt)}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-xs uppercase mb-2">
+                      Distributed
+                    </div>
+                    <div className="text-xl text-emerald-400" >
+                      {progress}%
+                    </div>
+                  </div>
                 </div>
               </div>
             </ContentBlock>

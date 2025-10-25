@@ -13,7 +13,6 @@ export interface PaymentConfirmationResponseInterface {
     credits_granted: number,
     amount_paid: number,
     currency: string,
-    new_credit_balance: number,
     sender_wallet: string,
     is_token_payment: boolean,
   },
