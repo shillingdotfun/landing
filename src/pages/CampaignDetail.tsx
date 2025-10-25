@@ -25,6 +25,7 @@ import { SolanaPaymentWall } from '../components/Campaign/SolanaPaymentWall';
 import { ParticipantsTable } from '../components/Campaign/ParticipantsTable';
 import { ActivityFeed } from '../components/Campaign/ActivityFeed';
 import { FundingSummary } from '../components/Campaign/FundingSummary';
+import { CAMPAIGN_CONSTANTS } from '../utils/constants';
 
 export const CampaignDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -343,7 +344,7 @@ export const CampaignDetail: React.FC = () => {
           bgHeaderColor='slate-200'
         >
           <SolanaPaymentWall
-            amount={(fundingInfo.pendingFunds).toFixed(6)}
+            amount={(fundingInfo.pendingFunds + fundingInfo.pendingFunds * CAMPAIGN_CONSTANTS.PLATFORM_FEE_PERCENTAGE).toFixed(6)}
             symbol={'SOL'}
             description={`Campaign pool funding`}
             orderId={`pool_funding-${userProfile?.id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
