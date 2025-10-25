@@ -16,17 +16,17 @@ export const KOLRankingRow: React.FC<KOLRankingRowProps> = ({ kol }) => {
   const successRateColor = getSuccessRateColor(kol.successRate);
 
   return (
-    <div 
+    <tr 
       className="grid grid-cols-[80px_1fr_100px_100px_100px_100px_110px_110px_100px] gap-3 px-6 py-5 items-center border-b border-[#2a2a35] transition-all hover:bg-indigo-500/5 cursor-pointer"
       onClick={() => window.location.href = `/kols/${kol.username}`}
     >
-      <div className="flex justify-center">
+      <td className="flex justify-center">
         <span className={`text-base ${kol.rank && kol.rank <= 3 ? 'text-amber-500' : 'text-gray-500'}`} >
           #{kol.rank}
         </span>
-      </div>
+      </td>
       
-      <div className="flex items-center gap-4">
+      <td className="flex items-center gap-4">
         <div 
           className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 flex-shrink-0" 
           style={{ imageRendering: 'pixelated' }} 
@@ -39,45 +39,45 @@ export const KOLRankingRow: React.FC<KOLRankingRowProps> = ({ kol }) => {
             LEVEL {kol.level} {kol.verified && '· VERIFIED'}
           </div>
         </div>
-      </div>
+      </td>
 
-      <div className="flex justify-center">
+      <td className="flex justify-center">
         <span className="text-[11px] text-gray-400" >
           {formatNumber(kol.karmaPoints)}
         </span>
-      </div>
+      </td>
 
-      <div className="flex justify-center">
+      <td className="flex justify-center">
         <span className="text-[11px] text-gray-400" >
           {kol.totalCampaigns}
         </span>
-      </div>
+      </td>
 
-      <div className="flex justify-center">
+      <td className="flex justify-center">
         <span className="text-[11px] text-gray-400" >
           {formatNumber(kol.totalReach)}
         </span>
-      </div>
+      </td>
 
-      <div className="flex justify-center">
+      <td className="flex justify-center">
         <span className="text-[11px] text-gray-400" >
           {formatCurrency(kol.totalEarnings)}
         </span>
-      </div>
+      </td>
 
-      <div className="flex justify-center">
+      <td className="flex justify-center">
         <span className={`text-[11px] ${successRateColor}`} >
           {formatPercentage(kol.successRate, 0)}
         </span>
-      </div>
+      </td>
 
-      <div className="flex justify-center">
+      <td className="flex justify-center">
         <span className="text-[11px] text-gray-400" >
           {formatPercentage(kol.averageEngagement)}
         </span>
-      </div>
+      </td>
 
-      <div className="flex justify-center">
+      <td className="flex justify-center">
         <span className={`text-[11px] ${kol.currentStreak > 5 ? 'text-amber-500' : 'text-gray-400'}`} >
           {kol.currentStreak > 5 ? (
             <span className='flex flex-row items-center gap-1'>
@@ -87,7 +87,7 @@ export const KOLRankingRow: React.FC<KOLRankingRowProps> = ({ kol }) => {
             kol.currentStreak
           )}
         </span>
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 };

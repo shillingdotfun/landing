@@ -26,21 +26,23 @@ export const KOLRankingTable: React.FC<KOLRankingTableProps> = ({ limit = 10 }) 
   }
 
   return (
-    <div className="border border-[#2a2a35]">
-      <div className="grid grid-cols-[80px_1fr_100px_100px_100px_100px_110px_110px_100px] gap-3 px-6 py-5 bg-indigo-500/5 border-b border-[#2a2a35] text-[7px] text-gray-500" >
-        <div className="text-center">RANK</div>
-        <div>KOL</div>
-        <div className="text-center">KARMA</div>
-        <div className="text-center">CAMPAIGNS</div>
-        <div className="text-center">REACH</div>
-        <div className="text-center">EARNINGS</div>
-        <div className="text-center">SUCCESS RATE</div>
-        <div className="text-center">AVG ENGAGE</div>
-        <div className="text-center">STREAK</div>
-      </div>
+    <table className="border border-[#2a2a35] w-full">
+      <thead className="grid grid-cols-[80px_1fr_100px_100px_100px_100px_110px_110px_100px] gap-3 px-6 py-5 bg-indigo-500/5 border-b border-[#2a2a35] text-xs">
+        <th className="text-center">RANK</th>
+        <th>KOL</th>
+        <th className="text-center">KARMA</th>
+        <th className="text-center">CAMPAIGNS</th>
+        <th className="text-center">REACH</th>
+        <th className="text-center">EARNINGS</th>
+        <th className="text-center">SUCCESS RATE</th>
+        <th className="text-center">AVG ENGAGE</th>
+        <th className="text-center">STREAK</th>
+      </thead>
+      <tbody>
       {kols?.map(kol => (
         <KOLRankingRow key={kol.id} kol={kol} />
       ))}
-    </div>
+      </tbody>
+    </table>
   );
 };

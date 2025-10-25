@@ -43,14 +43,14 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, show, onClose }) => {
         <div className="flex items-center w-full overflow-hidden">
           {!isCollapsed ? (
             <img
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/')}
               src={longLogoBlack}
               alt="Logo"
               className="h-12 px-4 cursor-pointer transition-opacity duration-300"
             />
           ) : (
             <img
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/')}
               src={smallBlackLogo}
               alt="Logo"
               className="h-8 cursor-pointer transition-opacity duration-300 mx-auto"
