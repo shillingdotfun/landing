@@ -20,7 +20,7 @@ const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Home', path: '/', icon: <FaHouse />},
     { name: 'KOLs', path: '/kols', icon: <FaCrown/> },
     { name: 'Campaigns', path: '/campaigns', icon: <FaPeopleGroup /> },
-    { name: 'Create', path: '/create', icon: <FaPlus /> }
+    { name: 'Create', path: '/campaigns/create', icon: <FaPlus /> }
   ]
 
   // Close sidebar explicitly
