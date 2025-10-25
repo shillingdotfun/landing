@@ -10,6 +10,14 @@ export interface CampaignType {
   updatedAt: string;
 }
 
+export interface CampaignFunding {
+  id: string;
+  amountPaid: number;
+  currency: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export enum CampaignStatus {
   DRAFT = 'draft',
   ACTIVE = 'active',
@@ -37,6 +45,7 @@ export interface Campaign {
   // Budget
   budget: number;
   distributedAmount: number;
+  funding: CampaignFunding[]
   
   // Requirements
   minKarma?: number;
