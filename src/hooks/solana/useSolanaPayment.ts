@@ -96,7 +96,7 @@ export const useSolanaPayment = () => {
         const mintEnv = import.meta.env.VITE_TOKEN_MINT;
         const payingSol = isNativeSOL(mintEnv);
 
-        const label = 'WuAI AI credits purchase';
+        const label = 'shilling.fun pool funding';
         const message = `Payment for ${request.description}`;
         const amount = new BigNumber(request.amount);
 
